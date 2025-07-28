@@ -1,8 +1,10 @@
-# portfolio-management-group2
+# [portfolio-management-group2](https://hsbc.aixcat.top/)
 
 ## front-end 
 
 ### preview
+Online Preview：https://hsbc.aixcat.top/
+
 This is a front-end project use the React `Next.js` and `Tailwind CSS`.
 
 It support the Responsive layout for different devices.
