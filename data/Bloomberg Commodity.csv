@@ -1,4 +1,2 @@
-Price,Close,High,Low,Open,Volume
-Ticker,AW=F,AW=F,AW=F,AW=F,AW=F
-Date,,,,,
+date,open,high,low,close,volume
 2025-07-25,103.58000183105469,104.31999969482422,103.27999877929688,104.31999969482422,193
