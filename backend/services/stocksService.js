@@ -1,7 +1,7 @@
 const supabase = require("../db");
 
 exports.getStockDetails = async (tickerId) => {
-    // 获取股票基本信息
+    // 获取 ticker 信息
     const { data: tickerData, error: tickerError } = await supabase
         .from("ticker")
         .select("id, ticker_name")
@@ -10,17 +10,22 @@ exports.getStockDetails = async (tickerId) => {
 
     if (tickerError || !tickerData) throw new Error("Ticker not found");
 
-    // 获取最近一次交易日的数据
+    // 获取最近两天的数据（为了计算变化）
     const { data: recentData, error: recentError } = await supabase
         .from("price_history")
         .select("date, open, close, high, low, volume")
         .eq("tickerph_id", tickerId)
         .order("date", { ascending: false })
-        .limit(1);
+        .limit(2); // 取最近两天
 
-    if (recentError || !recentData.length) throw new Error("No price history found");
+    if (recentError || recentData.length === 0) throw new Error("No price history found");
 
-    const recent = recentData[0];
+    const recent = recentData[0]; // 最近一天
+    const prev = recentData.length > 1 ? recentData[1] : recent; // 前一天（如果只有一天，就用同一天）
+
+    // 计算变化
+    const change = recent.close - prev.close;
+    const change_rate = prev.close !== 0 ? (change / prev.close) * 100 : 0;
 
     // 获取最近 14 天的收盘价走势
     const { data: history, error: historyError } = await supabase
@@ -41,6 +46,8 @@ exports.getStockDetails = async (tickerId) => {
         volume: recent.volume,
         high: parseFloat(recent.high.toFixed(2)),
         low: parseFloat(recent.low.toFixed(2)),
+        change: parseFloat(change.toFixed(2)),
+        change_rate: parseFloat(change_rate.toFixed(2)),
         history: history.map((h) => ({
             date: h.date,
             close: parseFloat(h.close.toFixed(2)),
