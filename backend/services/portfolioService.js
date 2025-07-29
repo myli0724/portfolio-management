@@ -15,7 +15,8 @@ exports.getHoldingsWithHistory = async (userId) => {
             .from("price_history")
             .select("date, close")
             .eq("tickerph_id", h.ticker.id)
-            .order("date", { ascending: true });
+            .order("date", { ascending: true })
+            .limit(14);
 
         if (historyError) throw historyError;
 
