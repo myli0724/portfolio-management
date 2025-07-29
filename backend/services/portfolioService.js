@@ -18,7 +18,7 @@ exports.getHoldingsWithHistory = async (userId) => {
             .from("price_history")
             .select("date, close")
             .eq("tickerph_id", h.ticker.id)
-            .order("date", { ascending: true })
+            .order("date", { ascending: false })
             .limit(14);
 
         if (historyError) throw historyError;
@@ -38,11 +38,11 @@ exports.getHoldingsWithHistory = async (userId) => {
         result.push({
             tickerId: h.ticker.id,
             ticker: h.ticker.ticker_name,
-            shares: h.buying_vol,
-            currentPrice: latestPrice,
-            totalValue: totalValueStock,
-            profit,
-            profitRate,
+            shares: parseFloat(h.buying_vol.toFixed(2)),
+            currentPrice: parseFloat(latestPrice.toFixed(2)),
+            totalValue: parseFloat(totalValueStock.toFixed(2)),
+            profit: parseFloat(profit.toFixed(2)),
+            profitRate: parseFloat(profitRate.toFixed(2)),
             history
         });
     }
@@ -54,11 +54,11 @@ exports.getHoldingsWithHistory = async (userId) => {
 
     return {
         summary: {
-            totalValue,
-            totalProfit,
-            totalChangeRate,
-            todayChange,
-            todayChangeRate,
+            totalValue: parseFloat(totalValue.toFixed(2)),
+            totalProfit: parseFloat(totalProfit.toFixed(2)),
+            totalChangeRate: parseFloat(totalChangeRate.toFixed(2)),
+            todayChange: parseFloat(todayChange.toFixed(2)),
+            todayChangeRate: parseFloat(todayChangeRate.toFixed(2)),
             holdingCount: holdings.length
         },
         holdings: result
