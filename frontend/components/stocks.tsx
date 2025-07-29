@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, TrendingUp, TrendingDown, Star } from "lucide-react"
@@ -145,8 +145,8 @@ export default function Stocks() {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle className="text-foreground">{selectedStock.symbol}</CardTitle>
-                    <p className="text-muted-foreground">{selectedStock.name}</p>
+                    <CardTitle className="text-foreground">{selectedStock.name}</CardTitle>
+                    {/* <p className="text-muted-foreground">{selectedStock.name}</p> */}
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-foreground">${selectedStock.price}</p>
@@ -163,6 +163,17 @@ export default function Stocks() {
                   </div>
                 </div>
               </CardHeader>
+              <CardDescription>
+                <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground px-6 pb-2">
+                  <div>Opening Price: ${selectedStock.data[0]}</div>
+                  <div>Closing Price: ${selectedStock.data[selectedStock.data.length - 1]}</div>
+                  <div>Date: {new Date().toLocaleDateString()}</div>
+                  <div>Highest: ${Math.max(...selectedStock.data)}</div>
+                  <div>Lowest: ${Math.min(...selectedStock.data)}</div>
+                  <div>Volume: {selectedStock.volume}</div>
+                  <div>Market Cap: {selectedStock.marketCap}</div>
+                </div>
+              </CardDescription>
               <CardContent>
                 <div className="h-64">
                   <StockChart historyData={selectedStock.data} />
