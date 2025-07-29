@@ -28,6 +28,8 @@ Then run `npm run dev` to start the front-end Next.js server.
 npm run dev
 ```
 
+## back-end
+
 ### How to run the back-end project
 
 Pull down the latest project, and `cd` to the `backend` directory.
@@ -43,3 +45,12 @@ Then run `node server.js` to start the server.
 ```
 node server.js
 ```
+
+### Testing database connection
+
+After successfully start the server, put in this following line on your website to test the connection with DB
+
+```
+http://localhost:3000/test-db
+```
+

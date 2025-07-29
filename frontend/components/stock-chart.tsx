@@ -1,14 +1,16 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { HistoryItem } from "@/types/history"
 
 interface StockChartProps {
-  data: number[]
+  historyData: HistoryItem[]
   color?: string
 }
 
-export default function StockChart({ data, color = "#ef4444" }: StockChartProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+export default function StockChart({ historyData, color = "#ef4444" }: StockChartProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const data = historyData.map(history => history.close);
 
   useEffect(() => {
     const canvas = canvasRef.current
