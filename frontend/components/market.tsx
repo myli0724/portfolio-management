@@ -12,89 +12,95 @@ import Navigation from "@/components/navigation"
 const mockNews = [
   {
     id: "1",
-    title: "苹果公司发布最新季度财报，营收超预期",
+    title: "Apple Reports Quarterly Earnings, Revenue Beats Expectations",
     summary:
-      "苹果公司今日发布了2024年第一季度财报，营收达到1196亿美元，同比增长2.1%，超出分析师预期。iPhone销售表现强劲，服务业务继续保持增长势头。",
-    source: "财经新闻",
-    time: "2小时前",
-    category: "财报",
+      "Apple today released its Q1 2024 financial results, reporting revenue of $119.6 billion, up 2.1% year-over-year and exceeding analysts’ expectations. Strong iPhone sales and continued growth in its services business drove the results.",
+    source: "Finance News",
+    time: "2 Hours Ago",
+    category: "Earnings Report",
     impact: "positive",
     relatedStocks: ["AAPL"],
     image: "/placeholder.svg?height=200&width=300&text=Apple+News",
   },
   {
     id: "2",
-    title: "特斯拉宣布在中国扩建超级工厂",
+    title: "Tesla Announces Expansion of Shanghai Gigafactory",
     summary:
-      "特斯拉宣布将在上海超级工厂投资额外50亿美元，用于扩大产能和研发新技术。此举预计将使特斯拉在中国的年产能提升至200万辆。",
-    source: "汽车资讯",
-    time: "4小时前",
-    category: "公司动态",
+      "Tesla has announced an additional $5 billion investment in its Shanghai Gigafactory to expand production capacity and develop new technologies. The expansion is expected to boost Tesla’s annual production capacity in China to 2 million vehicles.",
+    source: "Automotive News",
+    time: "4 Hours Ago",
+    category: "Company Update",
     impact: "positive",
     relatedStocks: ["TSLA"],
     image: "/placeholder.svg?height=200&width=300&text=Tesla+Factory",
   },
   {
     id: "3",
-    title: "美联储暗示可能调整利率政策",
+    title: "Fed Hints at Possible Adjustment to Interest Rate Policy",
     summary:
-      "美联储主席在最新讲话中暗示，考虑到当前经济形势和通胀水平，央行可能在下次会议上调整利率政策。市场对此反应谨慎。",
-    source: "央行动态",
-    time: "6小时前",
-    category: "宏观经济",
+      "In the latest speech, the Federal Reserve Chair indicated that considering the current economic conditions and inflation levels, the central bank may adjust its interest rate policy at the next meeting. Markets reacted cautiously.",
+    source: "Central Bank Updates",
+    time: "6 Hours Ago",
+    category: "Macroeconomy",
     impact: "neutral",
     relatedStocks: ["SPY", "QQQ"],
     image: "/placeholder.svg?height=200&width=300&text=Federal+Reserve",
   },
   {
     id: "4",
-    title: "微软Azure云服务营收增长强劲",
+    title: "Microsoft Azure Cloud Revenue Shows Strong Growth",
     summary:
-      "微软公布Azure云服务在上季度实现了30%的同比增长，继续在云计算市场保持领先地位。AI服务的快速发展成为增长的主要驱动力。",
-    source: "科技前沿",
-    time: "8小时前",
-    category: "科技",
+      "Microsoft reported a 30% year-over-year growth in Azure cloud services last quarter, maintaining its leading position in the cloud computing market. Rapid growth in AI services was a key driver of this performance.",
+    source: "Tech Insights",
+    time: "8 Hours Ago",
+    category: "Technology",
     impact: "positive",
     relatedStocks: ["MSFT"],
     image: "/placeholder.svg?height=200&width=300&text=Microsoft+Azure",
   },
   {
     id: "5",
-    title: "谷歌面临新的反垄断调查",
+    title: "Google Faces New Antitrust Investigation",
     summary:
-      "欧盟委员会宣布对谷歌的广告业务展开新一轮反垄断调查，重点关注其在数字广告市场的主导地位是否构成不公平竞争。",
-    source: "法律资讯",
-    time: "12小时前",
-    category: "监管",
+      "The European Commission announced a new antitrust investigation into Google's advertising business, focusing on whether its dominance in digital ads constitutes unfair competition.",
+    source: "Legal News",
+    time: "12 Hours Ago",
+    category: "Regulation",
     impact: "negative",
     relatedStocks: ["GOOGL"],
     image: "/placeholder.svg?height=200&width=300&text=Google+Investigation",
   },
   {
     id: "6",
-    title: "英伟达发布新一代AI芯片",
+    title: "NVIDIA Unveils Next-Generation H200 AI Chip",
     summary:
-      "英伟达发布了最新的H200 AI芯片，性能较上一代提升60%。新芯片将主要用于大型语言模型训练和推理，预计将进一步巩固英伟达在AI芯片市场的领导地位。",
-    source: "科技新闻",
-    time: "1天前",
-    category: "产品发布",
+      "NVIDIA launched its latest H200 AI chip, which delivers 60% more performance than the previous generation. The new chip is designed for large language model training and inference, further strengthening NVIDIA’s leadership in the AI chip market.",
+    source: "Tech News",
+    time: "1 Day Ago",
+    category: "Product Launch",
     impact: "positive",
     relatedStocks: ["NVDA"],
     image: "/placeholder.svg?height=200&width=300&text=NVIDIA+H200",
   },
 ]
 
-const categories = ["全部", "财报", "公司动态", "宏观经济", "科技", "监管", "产品发布"]
+const categories = ["All",
+  "Earnings",
+  "Company News",
+  "Macroeconomy",
+  "Technology",
+  "Regulation",
+  "Product Launch",];
 
 export default function Market() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("全部")
+  const [selectedCategory, setSelectedCategory] = useState("All")
 
   const filteredNews = mockNews.filter((news) => {
     const matchesSearch =
       news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       news.summary.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === "全部" || news.category === selectedCategory
+    const matchesCategory = selectedCategory === "All" || news.category === selectedCategory
     return matchesSearch && matchesCategory
   })
 
@@ -127,8 +133,8 @@ export default function Market() {
       <div className="lg:ml-64 p-4 lg:p-8 mobile-content lg:desktop-content">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">市场资讯</h1>
-          <p className="text-muted-foreground">获取最新的市场动态和投资资讯</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Market Insights</h1>
+          <p className="text-muted-foreground">Stay updated with the latest market trends and investment news</p>
         </div>
 
         {/* Search and Filter */}
@@ -136,7 +142,7 @@ export default function Market() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="搜索新闻..."
+              placeholder="Search News..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -203,7 +209,7 @@ export default function Market() {
                     {/* Related Stocks */}
                     {news.relatedStocks.length > 0 && (
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">相关股票:</span>
+                        <span className="text-xs text-muted-foreground">Related Stocks:</span>
                         <div className="flex gap-1">
                           {news.relatedStocks.map((stock) => (
                             <Badge
@@ -227,7 +233,7 @@ export default function Market() {
         {/* Load More */}
         <div className="text-center mt-8">
           <Button variant="outline" className="px-8 bg-transparent">
-            加载更多新闻
+            Load More News
           </Button>
         </div>
       </div>
