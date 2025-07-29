@@ -3,14 +3,14 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Home, TrendingUp, Wallet, Star, Settings, User, Menu, X, Sun, Moon } from "lucide-react"
+import { Home, TrendingUp, Wallet, Star, Settings, User, Menu, X, Sun, Moon, Info } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTheme } from "@/components/theme-provider"
 
 const navItems = [
-  { href: "/", icon: Home, label: "Home", badge: null },
   { href: "/portfolio", icon: Wallet, label: "Portfolio", badge: null },
+  { href: "/stocks", icon: Info, label: "Stocks", badge: null },
   { href: "/watchlist", icon: Star, label: "Watchlist", badge: "12" },
   { href: "/market", icon: TrendingUp, label: "Market", badge: null },
   { href: "/profile", icon: User, label: "Profile", badge: null },

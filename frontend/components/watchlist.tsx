@@ -149,7 +149,7 @@ export default function Watchlist() {
                 </CardHeader>
                 <CardContent>
                   <div className="mb-4 h-16">
-                    <StockChart data={stock.data} color={stock.change > 0 ? "#22c55e" : "#ef4444"} />
+                    <StockChart historyData={stock.data} color={stock.change > 0 ? "#22c55e" : "#ef4444"} />
                   </div>
                   <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                     <span>Volume: {stock.volume}</span>
