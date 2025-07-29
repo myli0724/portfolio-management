@@ -66,10 +66,10 @@ export default function Watchlist() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">自选股</h1>
-              <p className="text-muted-foreground">关注您感兴趣的股票</p>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Watchlist</h1>
+              <p className="text-muted-foreground">Follow the stocks you are interested in</p>
             </div>
-            <Badge variant="secondary">{watchlist.length} 支股票</Badge>
+            <Badge variant="secondary">{watchlist.length} Shares</Badge>
           </div>
         </div>
 
@@ -78,7 +78,7 @@ export default function Watchlist() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="搜索自选股..."
+              placeholder="Search Stocks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -90,7 +90,7 @@ export default function Watchlist() {
         <div className="mb-6">
           <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
             <Plus className="h-4 w-4 mr-2" />
-            添加股票
+            Add Stocks
           </Button>
         </div>
 
@@ -99,11 +99,11 @@ export default function Watchlist() {
           <Card className="border">
             <CardContent className="p-12 text-center">
               <Star className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">暂无自选股</h3>
-              <p className="text-muted-foreground mb-4">添加您感兴趣的股票到自选列表</p>
+              <h3 className="text-xl font-semibold text-foreground mb-2">No stocks in your watchlist.</h3>
+              <p className="text-muted-foreground mb-4">Add stocks you are interested in to your watchlist.</p>
               <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
                 <Plus className="h-4 w-4 mr-2" />
-                添加股票
+                Add to Watchlist
               </Button>
             </CardContent>
           </Card>
@@ -152,15 +152,15 @@ export default function Watchlist() {
                     <StockChart data={stock.data} color={stock.change > 0 ? "#22c55e" : "#ef4444"} />
                   </div>
                   <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                    <span>成交量: {stock.volume}</span>
+                    <span>Volume: {stock.volume}</span>
                   </div>
                   <div className="flex gap-2">
-                    <Button className="bg-green-600 hover:bg-green-700 flex-1">买入</Button>
+                    <Button className="bg-green-600 hover:bg-green-700 flex-1">Buy</Button>
                     <Button
                       variant="outline"
                       className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1 bg-transparent"
                     >
-                      卖出
+                      Sell
                     </Button>
                   </div>
                 </CardContent>

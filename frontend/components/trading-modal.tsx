@@ -44,9 +44,9 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {type === "buy" ? "买入" : "卖出"} {stock.symbol}
+            {type === "buy" ? "Buy" : "Sell"} {stock.symbol}
             <Badge variant={type === "buy" ? "default" : "destructive"} className="ml-2">
-              {type === "buy" ? "买入" : "卖出"}
+              {type === "buy" ? "Buy" : "Sell"}
             </Badge>
           </DialogTitle>
         </DialogHeader>
@@ -78,21 +78,21 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
 
           {/* Order Type */}
           <div>
-            <Label className="text-foreground mb-2 block">订单类型</Label>
+            <Label className="text-foreground mb-2 block">Order Type</Label>
             <div className="flex gap-2">
               <Button
                 variant={orderType === "market" ? "default" : "outline"}
                 onClick={() => setOrderType("market")}
                 className="flex-1"
               >
-                市价单
+                Market Order
               </Button>
               <Button
                 variant={orderType === "limit" ? "default" : "outline"}
                 onClick={() => setOrderType("limit")}
                 className="flex-1"
               >
-                限价单
+                Limit Order
               </Button>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
           {orderType === "limit" && (
             <div>
               <Label htmlFor="limitPrice" className="text-foreground">
-                限价价格
+                Limit Price
               </Label>
               <Input
                 id="limitPrice"
@@ -109,7 +109,7 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
                 step="0.01"
                 value={limitPrice}
                 onChange={(e) => setLimitPrice(e.target.value)}
-                placeholder="输入限价价格"
+                placeholder="Enter Limit Price"
               />
             </div>
           )}
@@ -117,14 +117,14 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
           {/* Quantity */}
           <div>
             <Label htmlFor="quantity" className="text-foreground">
-              数量
+              Quantity
             </Label>
             <Input
               id="quantity"
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
-              placeholder="输入股票数量"
+              placeholder="Enter Number of Shares"
             />
           </div>
 
@@ -132,7 +132,7 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
           {quantity && (
             <div className="bg-muted/50 rounded-lg p-4">
               <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">预估总价值</span>
+                <span className="text-muted-foreground">Estimated Total Value</span>
                 <span className="text-xl font-bold text-foreground">${totalValue.toFixed(2)}</span>
               </div>
             </div>
@@ -141,14 +141,14 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
           {/* Action Buttons */}
           <div className="flex gap-3">
             <Button variant="outline" onClick={onClose} className="flex-1 bg-transparent">
-              取消
+              Cancel
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={!quantity}
               className={`flex-1 ${type === "buy" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
             >
-              确认{type === "buy" ? "买入" : "卖出"}
+              Confirm{type === "buy" ? "Buy" : "Sell"}
             </Button>
           </div>
         </div>

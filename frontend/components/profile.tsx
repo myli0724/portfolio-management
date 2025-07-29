@@ -9,10 +9,10 @@ import Navigation from "@/components/navigation"
 
 // Mock user data
 const userData = {
-  name: "张三",
-  email: "zhangsan@example.com",
+  name: "Michael",
+  email: "wassupmichael@example.com",
   phone: "+86 138 0013 8000",
-  joinDate: "2023年3月15日",
+  joinDate: "2023/3/15",
   avatar: "/placeholder.svg?height=100&width=100&text=ZS",
   level: "VIP",
   totalInvestment: 125430.5,
@@ -21,10 +21,30 @@ const userData = {
   winRate: 68.5,
   totalTrades: 156,
   achievements: [
-    { id: 1, name: "新手投资者", description: "完成首次投资", earned: true },
-    { id: 2, name: "稳健投资者", description: "连续30天盈利", earned: true },
-    { id: 3, name: "投资达人", description: "总收益超过10%", earned: false },
-    { id: 4, name: "交易高手", description: "完成100笔交易", earned: true },
+    { 
+    id: 1,
+    name: "New Investor",
+    description: "Complete your first investment",
+    earned: true
+  },
+  { 
+    id: 2,
+    name: "Steady Investor",
+    description: "Maintain 30 consecutive days of profit",
+    earned: true
+  },
+  { 
+    id: 3,
+    name: "Investment Pro",
+    description: "Achieve a total return over 10%",
+    earned: false
+  },
+  { 
+    id: 4,
+    name: "Trading Expert",
+    description: "Complete 100 trades",
+    earned: true
+  },
   ],
   recentTrades: [
     { id: 1, symbol: "AAPL", type: "buy", shares: 10, price: 175.43, date: "2024-01-15", profit: 234.5 },
@@ -41,8 +61,8 @@ export default function Profile() {
       <div className="lg:ml-64 p-4 lg:p-8 mobile-content lg:desktop-content">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">个人中心</h1>
-          <p className="text-muted-foreground">管理您的账户信息和投资记录</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Profile</h1>
+          <p className="text-muted-foreground">Manage your account information and investment records</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -69,13 +89,13 @@ export default function Profile() {
                   </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <Calendar className="h-4 w-4" />
-                    <span className="text-sm">加入于 {userData.joinDate}</span>
+                    <span className="text-sm">Join in on {userData.joinDate}</span>
                   </div>
                 </div>
                 <div className="flex gap-2 mt-6">
                   <Button variant="outline" className="flex-1 bg-transparent">
                     <Settings className="h-4 w-4 mr-2" />
-                    设置
+                    Settings
                   </Button>
                   <Button variant="outline" size="icon">
                     <Bell className="h-4 w-4" />
@@ -89,7 +109,7 @@ export default function Profile() {
               <CardHeader>
                 <CardTitle className="text-foreground flex items-center gap-2">
                   <Award className="h-5 w-5 text-yellow-500" />
-                  成就徽章
+                  Achievement Badges
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -125,7 +145,7 @@ export default function Profile() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <DollarSign className="h-4 w-4 text-green-600" />
-                    <span className="text-muted-foreground text-sm">总投资</span>
+                    <span className="text-muted-foreground text-sm">Total Amount Invested</span>
                   </div>
                   <p className="text-lg font-bold text-foreground">${userData.totalInvestment.toLocaleString()}</p>
                 </CardContent>
@@ -135,7 +155,7 @@ export default function Profile() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingUp className="h-4 w-4 text-green-600" />
-                    <span className="text-muted-foreground text-sm">总收益</span>
+                    <span className="text-muted-foreground text-sm">Total Return</span>
                   </div>
                   <p className="text-lg font-bold text-green-600">+${userData.totalGain.toLocaleString()}</p>
                   <p className="text-xs text-green-600">+{userData.totalGainPercent}%</p>
@@ -146,7 +166,7 @@ export default function Profile() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Award className="h-4 w-4 text-blue-600" />
-                    <span className="text-muted-foreground text-sm">胜率</span>
+                    <span className="text-muted-foreground text-sm">Win Rate = Percentage of trades closed with a profit</span>
                   </div>
                   <p className="text-lg font-bold text-foreground">{userData.winRate}%</p>
                 </CardContent>
@@ -156,7 +176,7 @@ export default function Profile() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingUp className="h-4 w-4 text-purple-600" />
-                    <span className="text-muted-foreground text-sm">交易次数</span>
+                    <span className="text-muted-foreground text-sm">Total Trades</span>
                   </div>
                   <p className="text-lg font-bold text-foreground">{userData.totalTrades}</p>
                 </CardContent>
@@ -166,20 +186,20 @@ export default function Profile() {
             {/* Recent Trades */}
             <Card className="border">
               <CardHeader>
-                <CardTitle className="text-foreground">最近交易</CardTitle>
+                <CardTitle className="text-foreground">Most Recent Trades</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {userData.recentTrades.map((trade) => (
                     <div key={trade.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Badge variant={trade.type === "buy" ? "default" : "destructive"}>
-                          {trade.type === "buy" ? "买入" : "卖出"}
+                        <Badge className={trade.type === "buy" ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
+                            {trade.type === "buy" ? "Buy" : "Sell"}
                         </Badge>
                         <div>
                           <p className="font-semibold text-foreground">{trade.symbol}</p>
                           <p className="text-sm text-muted-foreground">
-                            {trade.shares} 股 @ ${trade.price}
+                            {trade.shares} Shares @ ${trade.price}
                           </p>
                         </div>
                       </div>
@@ -193,7 +213,7 @@ export default function Profile() {
                   ))}
                 </div>
                 <Button variant="outline" className="w-full mt-4 bg-transparent">
-                  查看全部交易记录
+                  View All Trades
                 </Button>
               </CardContent>
             </Card>

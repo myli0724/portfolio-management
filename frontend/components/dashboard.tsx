@@ -95,7 +95,7 @@ export default function Dashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Investment Dashboard</h1>
-          <p className="text-muted-foreground">实时市场数据与投资机会</p>
+          <p className="text-muted-foreground">Real-time Market Data & Investment Opportunities</p>
         </div>
 
         {/* Market Overview */}
@@ -129,7 +129,7 @@ export default function Dashboard() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="搜索股票代码或公司名称..."
+              placeholder="Search for Index or Company Name..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -172,14 +172,14 @@ export default function Dashboard() {
                     onClick={() => handleTrade(selectedStock, "buy")}
                     className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1"
                   >
-                    买入
+                    Buy
                   </Button>
                   <Button
                     onClick={() => handleTrade(selectedStock, "sell")}
                     variant="outline"
                     className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1"
                   >
-                    卖出
+                    Sell
                   </Button>
                   <Button
                     onClick={() => toggleWatchlist(selectedStock.id)}
@@ -198,7 +198,7 @@ export default function Dashboard() {
           <div>
             <Card className="border">
               <CardHeader>
-                <CardTitle className="text-foreground">热门股票</CardTitle>
+                <CardTitle className="text-foreground">Popular Stocks</CardTitle>
               </CardHeader>
               <CardContent>
                 <StockList

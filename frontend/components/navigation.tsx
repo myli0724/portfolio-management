@@ -9,12 +9,12 @@ import { usePathname } from "next/navigation"
 import { useTheme } from "@/components/theme-provider"
 
 const navItems = [
-  { href: "/", icon: Home, label: "首页", badge: null },
-  { href: "/portfolio", icon: Wallet, label: "投资组合", badge: null },
-  { href: "/watchlist", icon: Star, label: "自选股", badge: "12" },
-  { href: "/market", icon: TrendingUp, label: "市场", badge: null },
-  { href: "/profile", icon: User, label: "个人中心", badge: null },
-  { href: "/settings", icon: Settings, label: "设置", badge: null },
+  { href: "/", icon: Home, label: "Home", badge: null },
+  { href: "/portfolio", icon: Wallet, label: "Portfolio", badge: null },
+  { href: "/watchlist", icon: Star, label: "Watchlist", badge: "12" },
+  { href: "/market", icon: TrendingUp, label: "Market", badge: null },
+  { href: "/profile", icon: User, label: "Profile", badge: null },
+  { href: "/settings", icon: Settings, label: "Settings", badge: null },
 ]
 
 export default function Navigation() {

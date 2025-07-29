@@ -102,8 +102,8 @@ export default function StockList({
           </div>
 
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>成交量: {stock.volume}</span>
-            <span>市值: {stock.marketCap}</span>
+            <span>Volume: {stock.volume}</span>
+            <span>Market Value: {stock.marketCap}</span>
           </div>
 
           <div className="flex gap-2 mt-3">
@@ -115,7 +115,7 @@ export default function StockList({
                 onTrade(stock, "buy")
               }}
             >
-              买入
+              Buy
             </Button>
             <Button
               size="sm"
@@ -126,7 +126,7 @@ export default function StockList({
                 onTrade(stock, "sell")
               }}
             >
-              卖出
+              Sell
             </Button>
           </div>
         </div>
