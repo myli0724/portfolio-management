@@ -1,6 +1,6 @@
 import { HistoryItem } from "./history";
 
-export interface PortfolioData {
+export type PortfolioData = {
   tickerId: number,
   ticker: string,
   shares: number, // buying_vol
@@ -11,7 +11,7 @@ export interface PortfolioData {
   history: HistoryItem[]
 }
 
-export interface PortfolioApiResponse {
+export type PortfolioApiResponse = {
   summary: {
     totalValue: number;
     totalProfit: number;

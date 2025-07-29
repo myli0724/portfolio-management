@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart } from "lucide-react"
 import Navigation from "@/components/navigation"
 import StockChart from "@/components/stock-chart"
-import { fetchPortfolio } from "@/services/portfolio";
+import { fetchPortfolio } from "@/services/portfolioService";
 import { HistoryItem } from "@/types/history"
 import { useEffect, useState } from "react"
 import { setDefaultResultOrder } from "dns"
