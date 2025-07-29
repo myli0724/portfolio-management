@@ -1,12 +1,15 @@
 const express = require("express");
+const cors = require("cors")
 const { createClient } = require("@supabase/supabase-js");
+const {request} = require("express");
 require("dotenv").config();
 
 const app = express();
+// cors
+app.use(cors());
 app.use(express.json());
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-
 
 app.get("/user/:id/holdings-with-history", async (req, res) => {
     const userId = req.params.id;
