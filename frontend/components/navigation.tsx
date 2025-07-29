@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation"
 import { useTheme } from "@/components/theme-provider"
 
 const navItems = [
-  { href: "/dashboard", icon: Home, label: "首页", badge: null },
+  { href: "/", icon: Home, label: "首页", badge: null },
   { href: "/portfolio", icon: Wallet, label: "投资组合", badge: null },
   { href: "/watchlist", icon: Star, label: "自选股", badge: "12" },
   { href: "/market", icon: TrendingUp, label: "市场", badge: null },

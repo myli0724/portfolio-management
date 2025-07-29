@@ -61,7 +61,7 @@ const mockStocks = [
 const marketIndices = [
   { name: "S&P 500", value: "4,567.89", change: "+23.45", changePercent: "+0.52%" },
   { name: "NASDAQ", value: "14,234.56", change: "-45.67", changePercent: "-0.32%" },
-  { name: "DJIA", value: "34,567.12", change: "+123.45", changePercent: "+0.36%" },
+  { name: "Dow Jones", value: "34,567.12", change: "+123.45", changePercent: "+0.36%" },
 ]
 
 export default function Dashboard() {
@@ -94,7 +94,7 @@ export default function Dashboard() {
       <div className="lg:ml-64 p-4 lg:p-8 mobile-content lg:desktop-content">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">投资仪表板</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Investment Dashboard</h1>
           <p className="text-muted-foreground">实时市场数据与投资机会</p>
         </div>
 
