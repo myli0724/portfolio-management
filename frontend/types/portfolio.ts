@@ -15,7 +15,7 @@ export interface PortfolioApiResponse {
   summary: {
     totalValue: number;
     totalProfit: number;
-    totalProfitRate: number;
+    totalChangeRate: number;
     todayChange: number;
     todayChangeRate: number;
     holdingCount: number;

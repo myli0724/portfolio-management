@@ -64,7 +64,7 @@ const marketIndices = [
   { name: "Dow Jones", value: "34,567.12", change: "+123.45", changePercent: "+0.36%" },
 ]
 
-export default function Dashboard() {
+export default function Stocks() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedStock, setSelectedStock] = useState(mockStocks[0])
   const [tradingModalOpen, setTradingModalOpen] = useState(false)
@@ -94,7 +94,7 @@ export default function Dashboard() {
       <div className="lg:ml-64 p-4 lg:p-8 mobile-content lg:desktop-content">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Investment Dashboard</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Stocks Dashboard</h1>
           <p className="text-muted-foreground">Real-time Market Data & Investment Opportunities</p>
         </div>
 
@@ -165,12 +165,12 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="h-64">
-                  <StockChart data={selectedStock.data} />
+                  <StockChart historyData={selectedStock.data} />
                 </div>
                 <div className="flex gap-2 mt-4">
                   <Button
                     onClick={() => handleTrade(selectedStock, "buy")}
-                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1"
+                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1 text-white"
                   >
                     Buy
                   </Button>

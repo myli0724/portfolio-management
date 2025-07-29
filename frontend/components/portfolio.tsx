@@ -116,7 +116,7 @@ export default function Portfolio() {
                   <p className={`text-2xl font-bold ${ summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>
                     {summary.totalProfit >= 0 ? "+" : "-"}${Math.abs(summary.totalProfit).toLocaleString()}
                   </p>
-                  <p className={`text-sm ${ summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>+{summary?.totalProfitRate}%</p>
+                  <p className={`text-sm ${ summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>{summary?.totalChangeRate}%</p>
                 </>
               )}
             </CardContent>
