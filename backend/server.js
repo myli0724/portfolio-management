@@ -11,7 +11,6 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 app.get("/user/:id/holdings-with-history", async (req, res) => {
     const userId = req.params.id;
 
-    // Get user's holdings
     const { data: holdings, error: holdingsError } = await supabase
         .from("stockholder")
         .select(`
@@ -27,7 +26,6 @@ app.get("/user/:id/holdings-with-history", async (req, res) => {
 
     const result = [];
 
-    // For each stock, get full price history
     for (const h of holdings) {
         const { data: history, error: historyError } = await supabase
             .from("price_history")
@@ -44,18 +42,20 @@ app.get("/user/:id/holdings-with-history", async (req, res) => {
         const profitRate = totalCost > 0 ? (profit / totalCost) * 100 : 0;
 
         result.push({
+            tickerId: h.ticker.id,        // ✅ Add ticker.id to response
             ticker: h.ticker.ticker_name,
             shares: h.buying_vol,
             currentPrice: latestPrice,
             totalValue,
             profit,
             profitRate,
-            history // full price history for chart
+            history
         });
     }
 
     res.json({ success: true, data: result });
 });
+
 
 
 
