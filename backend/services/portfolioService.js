@@ -1,3 +1,5 @@
+const supabase = require("../db");
+
 exports.getPortfolioSummary = async (userId) => {
     const { data: holdings, error } = await supabase
         .from("stockholder")
