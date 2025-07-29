@@ -64,4 +64,3 @@ exports.getHoldingsWithHistory = async (userId) => {
         holdings: result
     };
 };
-
