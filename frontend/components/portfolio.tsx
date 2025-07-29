@@ -5,10 +5,11 @@ import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart } from "lucide-react"
 import Navigation from "@/components/navigation"
 import StockChart from "@/components/stock-chart"
-import { fetchPortfolio, PortfolioData } from "@/services/portfolio";
+import { fetchPortfolio } from "@/services/portfolio";
 import { HistoryItem } from "@/types/history"
 import { useEffect, useState } from "react"
 import { setDefaultResultOrder } from "dns"
+import { PortfolioApiResponse, PortfolioData } from "@/types/portfolio"
 
 // Mock portfolio data
 const mockPortfolioData = {
@@ -62,17 +63,22 @@ const mockPortfolioData = {
 
 export default function Portfolio() {
   const [portfolioDataList, setPortfolioDataList] = useState<PortfolioData[]>();
+  const [summary, setSummary] = useState<PortfolioApiResponse["summary"]>();
   const [error, setError] = useState<String>();
 
   useEffect(() => {
     fetchPortfolio()
-      .then(setPortfolioDataList)
+      .then(data => {
+        setPortfolioDataList(data.holdings);
+        setSummary(data.summary);
+        console.log(data);
+      })
       .catch((err) => {
         console.log(err);
         setError("Can't get portfolio data from the server...")
       })
   }, []);
-  console.log(portfolioDataList);
+
   if (error) return <div className="p-4 text-red-600">{error}</div>
   if (!portfolioDataList) return <div className="p-4">Loading...</div>
 
@@ -95,30 +101,42 @@ export default function Portfolio() {
                 <DollarSign className="h-5 w-5 text-green-600" />
                 <span className="text-muted-foreground text-sm">Total Assets</span>
               </div>
-              {/* 总资产数据 */}
-              <p className="text-2xl font-bold text-foreground">${mockPortfolioData.totalValue.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-foreground">${summary?.totalValue.toLocaleString()}</p>
             </CardContent>
           </Card>
 
           <Card className="border">
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="h-5 w-5 text-green-600" />
+                <TrendingUp className="h-5 w-5" />
                 <span className="text-muted-foreground text-sm">Total Gain/Loss</span>
               </div>
-              <p className="text-2xl font-bold text-green-600">+${mockPortfolioData.totalGain.toLocaleString()}</p>
-              <p className="text-sm text-green-600">+{mockPortfolioData.totalGainPercent}%</p>
+              {summary?.totalProfit !== undefined && (
+                <>
+                  <p className={`text-2xl font-bold ${ summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>
+                    {summary.totalProfit >= 0 ? "+" : "-"}${Math.abs(summary.totalProfit).toLocaleString()}
+                  </p>
+                  <p className={`text-sm ${ summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>+{summary?.totalProfitRate}%</p>
+                </>
+              )}
             </CardContent>
           </Card>
 
           <Card className="border">
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
-                <Percent className="h-5 w-5 text-red-600" />
+                <Percent className="h-5 w-5" />
                 <span className="text-muted-foreground text-sm">Daily Change</span>
               </div>
-              <p className="text-2xl font-bold text-red-600">${mockPortfolioData.dayChange.toLocaleString()}</p>
-              <p className="text-sm text-red-600">{mockPortfolioData.dayChangePercent}%</p>
+              {summary?.todayChange !== undefined && (
+                <>
+                  <p className={`text-2xl font-bold ${ summary?.todayChange >= 0 ? "text-green-600" : "text-red-600" }`}>
+                    {summary.todayChange >= 0 ? "+" : "-"}${Math.abs(summary.todayChange).toLocaleString()}
+                  </p>
+                  <p className={`text-sm ${ summary?.todayChange >= 0 ? "text-green-600" : "text-red-600" }`}>{summary?.todayChangeRate}%</p>
+                </>
+              )}
+              
             </CardContent>
           </Card>
 
@@ -128,7 +146,7 @@ export default function Portfolio() {
                 <PieChart className="h-5 w-5 text-blue-600" />
                 <span className="text-muted-foreground text-sm">Number of Holdings</span>
               </div>
-              <p className="text-2xl font-bold text-foreground">{portfolioDataList.length}</p>
+              <p className="text-2xl font-bold text-foreground">{summary?.holdingCount}</p>
               <p className="text-sm text-muted-foreground">stocks</p>
             </CardContent>
           </Card>
@@ -149,7 +167,7 @@ export default function Portfolio() {
                       <div>
                         <h3 className="font-semibold text-foreground">{portfolioData.ticker}</h3>
                         {/* <p className="text-sm text-muted-foreground">{portfolioData.name}</p> */}
-                        <p className="text-xs text-muted-foreground">{portfolioData.shares} 股</p>
+                        <p className="text-xs text-muted-foreground">{portfolioData.shares} {portfolioData.shares > 1 ? "Shares" : "Share"}</p>
                       </div>
                       <Badge
                         variant={portfolioData.profit > 0 ? "default" : "destructive"}
