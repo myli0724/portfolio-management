@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { SetStateAction, useEffect, useState } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, TrendingUp, TrendingDown, Star } from "lucide-react"
@@ -9,53 +9,47 @@ import Navigation from "@/components/navigation"
 import StockChart from "@/components/stock-chart"
 import StockList from "@/components/stock-list"
 import TradingModal from "@/components/trading-modal"
+import { fetchStockById, fetchStockByKeyWord } from "@/services/stocksService"
+import { Stock } from "@/types/stock"
 
 // Mock data
 const mockStocks = [
   {
-    id: "1",
-    symbol: "AAPL",
-    name: "Apple Inc.",
-    price: 175.43,
-    change: 2.34,
-    changePercent: 1.35,
-    volume: "45.2M",
-    marketCap: "2.8T",
-    data: [170, 172, 168, 175, 173, 176, 175.43],
+    id: 1,
+    tickerName: "AAPL",
+    recentOpenPrice: 175.43,
+    recentClosePrice: 182.98,
+    date: "2025-07-25",
+    marketValue: 2.8,
+    volume: 45.2,
+    high: 215.4,
+    low: 213.24,
+    history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
   },
   {
-    id: "2",
-    symbol: "TSLA",
-    name: "Tesla Inc.",
-    price: 248.5,
-    change: -5.2,
-    changePercent: -2.05,
-    volume: "89.1M",
-    marketCap: "789B",
-    data: [260, 255, 250, 245, 252, 248, 248.5],
+    id: 2,
+    tickerName: "TSLA",
+    recentOpenPrice: 175.43,
+    recentClosePrice: 182.98,
+    date: "2025-07-25",
+    marketValue: 2.8,
+    volume: 45.2,
+    high: 215.4,
+    low: 213.24,
+    history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
   },
   {
-    id: "3",
-    symbol: "MSFT",
-    name: "Microsoft Corp.",
-    price: 378.85,
-    change: 4.12,
-    changePercent: 1.1,
-    volume: "23.4M",
-    marketCap: "2.8T",
-    data: [370, 375, 372, 380, 376, 382, 378.85],
-  },
-  {
-    id: "4",
-    symbol: "GOOGL",
-    name: "Alphabet Inc.",
-    price: 138.21,
-    change: -1.45,
-    changePercent: -1.04,
-    volume: "31.2M",
-    marketCap: "1.7T",
-    data: [142, 140, 138, 141, 139, 137, 138.21],
-  },
+    id: 3,
+    tickerName: "MSFT",
+    recentOpenPrice: 175.43,
+    recentClosePrice: 182.98,
+    date: "2025-07-25",
+    marketValue: 2.8,
+    volume: 45.2,
+    high: 215.4,
+    low: 213.24,
+    history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
+  }
 ]
 
 const marketIndices = [
@@ -66,16 +60,24 @@ const marketIndices = [
 
 export default function Stocks() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedStock, setSelectedStock] = useState(mockStocks[0])
+  const [selectedStockId, setSelectedStockId] = useState(1);
+  const [selectedStock, setSelectedStock] = useState<Stock>()
   const [tradingModalOpen, setTradingModalOpen] = useState(false)
   const [tradingType, setTradingType] = useState<"buy" | "sell">("buy")
-  const [watchlist, setWatchlist] = useState<string[]>(["1", "3"])
+  const [watchlist, setWatchlist] = useState<number[]>([1, 3])
+  const [error, setError] = useState<String>();
 
-  const filteredStocks = mockStocks.filter(
-    (stock) =>
-      stock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      stock.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+  useEffect(() => {
+    fetchStockById(selectedStockId)
+      .then(data => {
+        setSelectedStock(data);
+        console.log(selectedStock);
+      })
+      .catch((err) => {
+        console.log(err);
+        setError("Can't get portfolio data from the server...")
+      })
+  }, [selectedStockId]);
 
   const handleTrade = (stock: any, type: "buy" | "sell") => {
     setSelectedStock(stock)
@@ -83,8 +85,21 @@ export default function Stocks() {
     setTradingModalOpen(true)
   }
 
-  const toggleWatchlist = (stockId: string) => {
+  const toggleWatchlist = (stockId: number) => {
     setWatchlist((prev) => (prev.includes(stockId) ? prev.filter((id) => id !== stockId) : [...prev, stockId]))
+  }
+
+  const handleSearch = (e: any) => {
+    setSearchQuery(e.target.value);
+    fetchStockByKeyWord(e.target.value)
+      .then(data => {
+        setSelectedStock(data);
+        console.log(selectedStock);
+      })
+      .catch((err) => {
+        console.log(err);
+        setError("Can't get portfolio data from the server...")
+      })
   }
 
   return (
@@ -131,7 +146,7 @@ export default function Stocks() {
             <Input
               placeholder="Search for Index or Company Name..." 
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearch}
               className="pl-10"
             />
           </div>
@@ -141,57 +156,91 @@ export default function Stocks() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Stock Chart */}
           <div className="xl:col-span-2">
-            <Card className="border">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle className="text-foreground">{selectedStock.symbol}</CardTitle>
-                    <p className="text-muted-foreground">{selectedStock.name}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-foreground">${selectedStock.price}</p>
-                    <div className="flex items-center gap-1">
-                      {selectedStock.change > 0 ? (
-                        <TrendingUp className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <TrendingDown className="h-4 w-4 text-red-600" />
-                      )}
-                      <span className={selectedStock.change > 0 ? "text-green-600" : "text-red-600"}>
-                        ${Math.abs(selectedStock.change)} ({Math.abs(selectedStock.changePercent)}%)
-                      </span>
+            {selectedStock && (
+              <Card className="border">
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle className="text-foreground">{selectedStock?.tickerName}</CardTitle>
+                      {/* <p className="text-muted-foreground">{selectedStock.name}</p> */}
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-foreground">${selectedStock?.recentClosePrice}</p>
+                      <div className="flex items-center gap-1">
+                        {selectedStock?.recentClosePrice - selectedStock.recentOpenPrice > 0 ? (
+                          <TrendingUp className="h-4 w-4 text-green-600" />
+                        ) : (
+                          <TrendingDown className="h-4 w-4 text-red-600" />
+                        )}
+                        <span className={selectedStock?.recentClosePrice - selectedStock.recentOpenPrice > 0 ? "text-green-600" : "text-red-600"}>
+                          ${Math.abs(selectedStock?.recentClosePrice - selectedStock.recentOpenPrice).toFixed(2)} ({(Math.abs(selectedStock?.recentClosePrice - selectedStock.recentOpenPrice) / selectedStock.recentOpenPrice).toFixed(2)}%)
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64">
-                  <StockChart historyData={selectedStock.data} />
-                </div>
-                <div className="flex gap-2 mt-4">
-                  <Button
-                    onClick={() => handleTrade(selectedStock, "buy")}
-                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1 text-white"
-                  >
-                    Buy
-                  </Button>
-                  <Button
-                    onClick={() => handleTrade(selectedStock, "sell")}
-                    variant="outline"
-                    className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1"
-                  >
-                    Sell
-                  </Button>
-                  <Button
-                    onClick={() => toggleWatchlist(selectedStock.id)}
-                    variant="outline"
-                    size="icon"
-                    className={`${watchlist.includes(selectedStock.id) ? "text-yellow-500 bg-yellow-500/10" : ""}`}
-                  >
-                    <Star className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardDescription>
+                  <div className="space-y-2 text-sm text-muted-foreground px-6 pb-2">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <span className="font-semibold">Opening Price:</span> ${selectedStock?.recentOpenPrice}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Closing Price:</span> ${selectedStock?.recentClosePrice}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Date:</span> {selectedStock?.date}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <span className="font-semibold">Highest:</span> ${selectedStock?.high}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Lowest:</span> ${selectedStock?.low}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <span className="font-semibold">Volume:</span> {selectedStock?.volume}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Market Cap:</span> {selectedStock?.marketValue}
+                      </div>
+                    </div>
+                  </div>
+                </CardDescription>
+                <CardContent>
+                  <div className="h-64">
+                    <StockChart historyData={selectedStock?.history} />
+                  </div>
+                  <div className="flex gap-2 mt-4">
+                    <Button
+                      onClick={() => handleTrade(selectedStock, "buy")}
+                      className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1 text-white"
+                    >
+                      Buy
+                    </Button>
+                    <Button
+                      onClick={() => handleTrade(selectedStock, "sell")}
+                      variant="outline"
+                      className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1"
+                    >
+                      Sell
+                    </Button>
+                    {/* <Button
+                      onClick={() => toggleWatchlist(selectedStockId)}
+                      variant="outline"
+                      size="icon"
+                      className={`${watchlist.includes(selectedStockId) ? "text-yellow-500 bg-yellow-500/10" : ""}`}
+                    >
+                      <Star className="h-4 w-4" />
+                    </Button> */}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Stock List */}
@@ -201,26 +250,28 @@ export default function Stocks() {
                 <CardTitle className="text-foreground">Popular Stocks</CardTitle>
               </CardHeader>
               <CardContent>
-                <StockList
-                  stocks={filteredStocks}
-                  onSelectStock={setSelectedStock}
-                  selectedStock={selectedStock}
-                  watchlist={watchlist}
-                  onToggleWatchlist={toggleWatchlist}
-                  onTrade={handleTrade}
-                />
+                {selectedStock && (
+                  <StockList
+                    stocks={mockStocks}
+                    onSelectStock={setSelectedStock}
+                    selectedStock={selectedStock}
+                    watchlist={watchlist}
+                    onToggleWatchlist={toggleWatchlist}
+                    onTrade={handleTrade}
+                  />
+                )}
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
 
-      <TradingModal
+      {/* <TradingModal
         isOpen={tradingModalOpen}
         onClose={() => setTradingModalOpen(false)}
         stock={selectedStock}
         type={tradingType}
-      />
+      /> */}
     </div>
   )
 }
