@@ -61,7 +61,7 @@ const mockStocks = [
 const marketIndices = [
   { name: "S&P 500", value: "4,567.89", change: "+23.45", changePercent: "+0.52%" },
   { name: "NASDAQ", value: "14,234.56", change: "-45.67", changePercent: "-0.32%" },
-  { name: "道琼斯", value: "34,567.12", change: "+123.45", changePercent: "+0.36%" },
+  { name: "DJIA", value: "34,567.12", change: "+123.45", changePercent: "+0.36%" },
 ]
 
 export default function Dashboard() {
@@ -129,7 +129,7 @@ export default function Dashboard() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="搜索股票代码或公司名称..."
+              placeholder="Search for Index or Company Name..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
