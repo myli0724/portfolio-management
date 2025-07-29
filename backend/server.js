@@ -15,7 +15,10 @@ app.use(
 
 // Import routes
 const portfolioRoutes = require("./routes/portfolio");
+const stocksRoutes = require("./routes/stocks");
+
 app.use("/", portfolioRoutes);
+app.use("/stocks", stocksRoutes);
 
 const PORT = 3001;
 app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
