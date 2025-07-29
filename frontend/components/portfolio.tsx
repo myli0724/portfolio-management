@@ -5,9 +5,12 @@ import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart } from "lucide-react"
 import Navigation from "@/components/navigation"
 import StockChart from "@/components/stock-chart"
+import {fetchPortfolio, PortfolioData} from "@/services/portfolio";
+import { useEffect, useState } from "react"
+import { setDefaultResultOrder } from "dns"
 
 // Mock portfolio data
-const portfolioData = {
+const mockPortfolioData = {
   totalValue: 125430.5,
   totalGain: 8234.2,
   totalGainPercent: 7.02,
@@ -57,6 +60,21 @@ const portfolioData = {
 }
 
 export default function Portfolio() {
+  const [portfolioData, setPortfolioData] = useState<PortfolioData[]>();
+  const [error, setError] = useState<String>();
+
+  useEffect(() => {
+    fetchPortfolio()
+      .then(setPortfolioData)
+      .catch((err) => {
+        console.log(err);
+        setError("Can't get portfolio data from the server...")
+      })
+  }, []);
+
+  if (error) return <div className="p-4 text-red-600">{error}</div>
+  if (!portfolioData) return <div className="p-4">Loading...</div>
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -76,7 +94,8 @@ export default function Portfolio() {
                 <DollarSign className="h-5 w-5 text-green-600" />
                 <span className="text-muted-foreground text-sm">总资产</span>
               </div>
-              <p className="text-2xl font-bold text-foreground">${portfolioData.totalValue.toLocaleString()}</p>
+              {/* 总资产数据 */}
+              <p className="text-2xl font-bold text-foreground">${mockPortfolioData.totalValue.toLocaleString()}</p>
             </CardContent>
           </Card>
 
@@ -86,8 +105,8 @@ export default function Portfolio() {
                 <TrendingUp className="h-5 w-5 text-green-600" />
                 <span className="text-muted-foreground text-sm">总收益</span>
               </div>
-              <p className="text-2xl font-bold text-green-600">+${portfolioData.totalGain.toLocaleString()}</p>
-              <p className="text-sm text-green-600">+{portfolioData.totalGainPercent}%</p>
+              <p className="text-2xl font-bold text-green-600">+${mockPortfolioData.totalGain.toLocaleString()}</p>
+              <p className="text-sm text-green-600">+{mockPortfolioData.totalGainPercent}%</p>
             </CardContent>
           </Card>
 
@@ -97,8 +116,8 @@ export default function Portfolio() {
                 <Percent className="h-5 w-5 text-red-600" />
                 <span className="text-muted-foreground text-sm">今日变化</span>
               </div>
-              <p className="text-2xl font-bold text-red-600">${portfolioData.dayChange.toLocaleString()}</p>
-              <p className="text-sm text-red-600">{portfolioData.dayChangePercent}%</p>
+              <p className="text-2xl font-bold text-red-600">${mockPortfolioData.dayChange.toLocaleString()}</p>
+              <p className="text-sm text-red-600">{mockPortfolioData.dayChangePercent}%</p>
             </CardContent>
           </Card>
 
@@ -108,7 +127,7 @@ export default function Portfolio() {
                 <PieChart className="h-5 w-5 text-blue-600" />
                 <span className="text-muted-foreground text-sm">持仓数量</span>
               </div>
-              <p className="text-2xl font-bold text-foreground">{portfolioData.holdings.length}</p>
+              <p className="text-2xl font-bold text-foreground">{portfolioData.length}</p>
               <p className="text-sm text-muted-foreground">支股票</p>
             </CardContent>
           </Card>
@@ -121,27 +140,27 @@ export default function Portfolio() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {portfolioData.holdings.map((holding) => (
-                <div key={holding.id} className="bg-muted/30 rounded-lg p-4">
+              {portfolioData.map((holding) => (
+                <div key={holding.tickerId} className="bg-muted/30 rounded-lg p-4">
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     {/* Stock Info */}
                     <div className="flex items-center justify-between lg:justify-start gap-4">
                       <div>
-                        <h3 className="font-semibold text-foreground">{holding.symbol}</h3>
-                        <p className="text-sm text-muted-foreground">{holding.name}</p>
+                        <h3 className="font-semibold text-foreground">{holding.ticker}</h3>
+                        {/* <p className="text-sm text-muted-foreground">{holding.name}</p> */}
                         <p className="text-xs text-muted-foreground">{holding.shares} 股</p>
                       </div>
                       <Badge
-                        variant={holding.gain > 0 ? "default" : "destructive"}
-                        className={holding.gain > 0 ? "bg-green-600" : "bg-red-600"}
+                        variant={holding.profit > 0 ? "default" : "destructive"}
+                        className={holding.profit > 0 ? "bg-green-600" : "bg-red-600"}
                       >
-                        {holding.allocation}%
+                        {holding.profitRate}%
                       </Badge>
                     </div>
 
                     {/* Chart */}
                     <div className="h-16">
-                      <StockChart data={holding.data} color={holding.gain > 0 ? "#22c55e" : "#ef4444"} />
+                      <StockChart data={holding.history} color={holding.profit > 0 ? "#22c55e" : "#ef4444"} />
                     </div>
 
                     {/* Performance */}
@@ -152,7 +171,7 @@ export default function Portfolio() {
                       </div>
                       <div>
                         <p className="text-muted-foreground">平均成本</p>
-                        <p className="font-semibold text-foreground">${holding.avgPrice}</p>
+                        <p className="font-semibold text-foreground">null</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">市值</p>
@@ -161,13 +180,13 @@ export default function Portfolio() {
                       <div>
                         <p className="text-muted-foreground">盈亏</p>
                         <div className="flex items-center gap-1">
-                          {holding.gain > 0 ? (
+                          {holding.profit > 0 ? (
                             <TrendingUp className="h-3 w-3 text-green-600" />
                           ) : (
                             <TrendingDown className="h-3 w-3 text-red-600" />
                           )}
-                          <span className={`font-semibold ${holding.gain > 0 ? "text-green-600" : "text-red-600"}`}>
-                            ${Math.abs(holding.gain).toLocaleString()} ({Math.abs(holding.gainPercent)}%)
+                          <span className={`font-semibold ${holding.profit > 0 ? "text-green-600" : "text-red-600"}`}>
+                            ${Math.abs(holding.profit).toLocaleString()} ({Math.abs(holding.profitRate)}%)
                           </span>
                         </div>
                       </div>
