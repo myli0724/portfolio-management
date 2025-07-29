@@ -1,4 +1,5 @@
 import { CURRENT_USER_ID } from "@/lib/constants"
+import { HistoryItem } from "@/types/history";
 
 export interface PortfolioData {
   tickerId: number,
@@ -8,7 +9,7 @@ export interface PortfolioData {
   totalValue: number,
   profit: number,
   profitRate: number,
-  history: number[]
+  history: HistoryItem[]
 }
 
 const API_BASE = "http://localhost:3001";
@@ -21,5 +22,6 @@ export async function fetchPortfolio(): Promise<PortfolioData[]> {
         throw new Error("Failed getting portfolio data...");
     }
 
-    return res.json();
+    const json = await res.json();
+    return json.data;
 }
