@@ -25,8 +25,8 @@ interface TradingModalProps {
   onTradeComplete: (newData: any) => void
 }
 
-  const { t } = useI18n();
 export default function TradingModal({ isOpen, onClose, stockId, stockName, stockPrice, stockChange, stockChangeRate, userBalance, shares, type, onTradeComplete }: TradingModalProps) {
+  const { t } = useI18n();
   const [quantity, setQuantity] = useState("")
   const [orderType, setOrderType] = useState<"market" | "limit">("market")
   const [limitPrice, setLimitPrice] = useState("")
