@@ -2,14 +2,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart, LineChart, Banknote } from "lucide-react"
 import Navigation from "@/components/navigation"
 import StockChart from "@/components/stock-chart"
 import { fetchPortfolio } from "@/services/portfolioService";
 import { HistoryItem } from "@/types/history"
 import { useEffect, useState } from "react"
 import { setDefaultResultOrder } from "dns"
-import { PortfolioApiResponse, PortfolioData } from "@/types/portfolio"
+import { Balance, PortfolioApiResponse, PortfolioData, transformBalanceData } from "@/types/portfolio"
 import { Button } from "./ui/button"
 import Operation from "./operation"
 import TradingModal from "./trading-modal"
@@ -71,12 +71,14 @@ export default function Portfolio() {
   const [error, setError] = useState<String>();
   const [tradeAction, setTradeAction] = useState<"buy" | "sell">("buy");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [balance, setBalance] = useState<Balance>();
 
   useEffect(() => {
     fetchPortfolio()
       .then(data => {
         setPortfolioDataList(data.holdings);
         setSummary(data.summary);
+        setBalance(transformBalanceData(data.user))
         console.log(data);
       })
       .catch((err) => {
@@ -94,6 +96,12 @@ export default function Portfolio() {
     setModalOpen(true);
   }
 
+  const handleTradeComplete = (newUserData: any) => {
+    // setPortfolioDataList(newUserData.holdings);
+    // setSummary(newUserData.summary);
+    setBalance(transformBalanceData(newUserData))
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -106,21 +114,42 @@ export default function Portfolio() {
         </div>
 
         {/* Portfolio Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <Card className="border">
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="h-5 w-5 text-green-600" />
-                <span className="text-muted-foreground text-sm">Total Assets</span>
+                <Banknote className="h-5 w-5 text-purple-600" />
+                {/* 总和 */}
+                <span className="text-muted-foreground text-sm">Balance</span>
               </div>
-              <p className="text-2xl font-bold text-foreground">${summary?.totalValue.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-foreground">${balance?.totalBalance.toLocaleString()}</p>
             </CardContent>
           </Card>
 
           <Card className="border">
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="h-5 w-5" />
+                <LineChart className="h-5 w-5 text-green-700" />
+                <span className="text-muted-foreground text-sm">Assets</span>
+              </div>
+              <p className="text-2xl font-bold text-foreground">${balance?.assets.toLocaleString()}</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2 mb-2">
+                <DollarSign className="h-5 w-5 text-yellow-600" />
+                <span className="text-muted-foreground text-sm">Available Balance</span>
+              </div>
+              <p className="text-2xl font-bold text-foreground">${balance?.availableBalance.toLocaleString()}</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingUp className={` h-5 w-5 ${ summary?.totalProfit && summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}/>
                 <span className="text-muted-foreground text-sm">Total Gain/Loss</span>
               </div>
               {summary?.totalProfit !== undefined && (
@@ -137,7 +166,7 @@ export default function Portfolio() {
           <Card className="border">
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
-                <Percent className="h-5 w-5" />
+                <Percent className={` h-5 w-5 ${ summary?.todayChange && summary?.todayChange >= 0 ? "text-green-600" : "text-red-600" }`} />
                 <span className="text-muted-foreground text-sm">Daily Change</span>
               </div>
               {summary?.todayChange !== undefined && (
@@ -258,7 +287,7 @@ export default function Portfolio() {
             ))}
           </>
         )}
-        {selectedStock && (
+        {selectedStock && balance && (
           <TradingModal
             isOpen={modalOpen}
             onClose={() => setModalOpen(false)}
@@ -267,7 +296,10 @@ export default function Portfolio() {
             stockPrice={selectedStock.currentPrice} 
             stockChange={selectedStock.profit} 
             stockChangeRate={selectedStock.profitRate} 
-            type={tradeAction} >
+            userBalance={balance?.availableBalance}
+            shares={selectedStock.shares}
+            type={tradeAction}
+            onTradeComplete={handleTradeComplete}>
           </TradingModal> 
         )}
       </div>
