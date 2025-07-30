@@ -73,7 +73,7 @@ export default function Stocks() {
   const [tradingType, setTradingType] = useState<"buy" | "sell">("buy")
   const [watchlist, setWatchlist] = useState<number[]>([1, 3])
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<String>();
+  const [error, setError] = useState<String>("");
 
   useEffect(() => {
     fetchStockById(selectedStockId)
@@ -113,6 +113,7 @@ export default function Stocks() {
     fetchStockByKeyWord(searchQuery)
       .then(data => {
         setSelectedStock(data);
+        setError("");
         console.log(selectedStock);
       })
       .catch((err) => {
@@ -123,8 +124,6 @@ export default function Stocks() {
         setLoading(false);
       })
   }
-
-
 
   return (
     <div className="min-h-screen bg-background">
@@ -187,7 +186,12 @@ export default function Stocks() {
         {/* Main Content */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Stock Chart */}
-          <div className="xl:col-span-2">
+          {error !== "" ? (
+            <div className="xl:col-span-2 text-center text-red-600 mt-4">
+              No matching stock found.
+            </div>
+          ) : (
+            <div className="xl:col-span-2">
             {selectedStock && (
               <Card className="border">
                 <CardHeader>
@@ -267,6 +271,8 @@ export default function Stocks() {
               </Card>
             )}
           </div>
+          )}
+          
 
           {/* Stock List */}
           <div>
