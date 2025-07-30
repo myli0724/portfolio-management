@@ -24,6 +24,8 @@
     "title": "Portafolio",
     "subtitle": "Resumen del Rendimiento de Inversión",
     "totalAssets": "Activos Totales",
+    "assets": "Activos",
+    "availableFunds": "Fundos Disponibles",
     "totalGainLoss": "Ganancia/Pérdida Total",
     "dailyChange": "Cambio Diario",
     "numberOfHoldings": "Número de Posiciones",

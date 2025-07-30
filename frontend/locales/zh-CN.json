@@ -24,6 +24,8 @@
     "title": "投资组合",
     "subtitle": "投资表现概览",
     "totalAssets": "总资产",
+    "assets": "资产",
+    "availableFunds": "可用资金",
     "totalGainLoss": "总收益/亏损",
     "dailyChange": "日变化",
     "numberOfHoldings": "持仓数量",

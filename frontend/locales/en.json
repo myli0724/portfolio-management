@@ -24,6 +24,8 @@
     "title": "Portfolio",
     "subtitle": "Investment Performance Overview",
     "totalAssets": "Total Assets",
+    "assets": "Assets",
+    "availableFunds": "Available Funds",
     "totalGainLoss": "Total Gain/Loss",
     "dailyChange": "Daily Change",
     "numberOfHoldings": "Number of Holdings",

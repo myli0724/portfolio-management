@@ -132,7 +132,7 @@ export default function Portfolio() {
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <LineChart className="h-5 w-5 text-green-700" />
-                <span className="text-muted-foreground text-sm">{t("portfolio.totalGainLoss")}</span>
+                <span className="text-muted-foreground text-sm">{t("portfolio.assets")}</span>
               </div>
               <p className="text-2xl font-bold text-foreground">${balance?.assets.toLocaleString()}</p>
             </CardContent>
@@ -142,7 +142,7 @@ export default function Portfolio() {
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <DollarSign className="h-5 w-5 text-green-600" />
-                <span className="text-muted-foreground text-sm">{t("portfolio.totalAssets")}</span>
+                <span className="text-muted-foreground text-sm">{t("portfolio.availableFunds")}</span>
               </div>
               <p className="text-2xl font-bold text-foreground">${balance?.availableBalance.toLocaleString()}</p>
             </CardContent>

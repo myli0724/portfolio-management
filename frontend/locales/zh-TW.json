@@ -24,6 +24,8 @@
     "title": "投資組合",
     "subtitle": "投資表現概覽",
     "totalAssets": "總資產",
+    "assets": "資產",
+    "availableFunds": "可用資金",
     "totalGainLoss": "總收益/虧損",
     "dailyChange": "日變化",
     "numberOfHoldings": "持倉數量",
