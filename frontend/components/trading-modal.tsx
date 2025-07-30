@@ -13,28 +13,35 @@ import { tradeStock } from "@/services/stocksService"
 interface TradingModalProps {
   isOpen: boolean
   onClose: () => void
-  stock: Stock
+  stockId: number
+  stockName: string
+  stockPrice: number
+  stockChange: number
+  stockChangeRate: number
   type: "buy" | "sell"
 }
 
-export default function TradingModal({ isOpen, onClose, stock, type }: TradingModalProps) {
-  const [quantity, setQuantity] = useState<number>(0)
+export default function TradingModal({ isOpen, onClose, stockId, stockName, stockPrice, stockChange, stockChangeRate, type }: TradingModalProps) {
+  const [quantity, setQuantity] = useState("")
   const [orderType, setOrderType] = useState<"market" | "limit">("market")
   const [limitPrice, setLimitPrice] = useState("")
   const [error, setError] = useState("");
 
-  const totalValue = quantity * stock.recentClosePrice || 0
+  const totalValue = Number(quantity) * stockPrice || 0
 
   const handleSubmit = async () => {
     try {
-      await tradeStock(stock.id, type, quantity, stock.recentClosePrice)
+      const res = await tradeStock(stockId, type, Number(quantity), stockPrice);
+      console.log("✅ Trade Success:", res);
+      setQuantity("");
       // setSuccess(true)
       setTimeout(() => {
         // setSuccess(false)
         onClose()
       }, 1500)
     } catch (err: any) {
-      setError("Trade failed, please try again.")
+      console.error("❌ Trade Error:", err);
+      setError("Trade failed, please try again.");
     } 
   }
 
@@ -43,7 +50,7 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {type === "buy" ? "Buy" : "Sell"} {stock.tickerName}
+            {type === "buy" ? "Buy" : "Sell"} {stockName}
             <Badge variant={type === "buy" ? "default" : "destructive"} className="ml-2">
               {type === "buy" ? "Buy" : "Sell"}
             </Badge>
@@ -55,20 +62,20 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
           <div className="bg-muted/50 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <div>
-                <h3 className="font-semibold text-foreground">{stock.tickerName}</h3>
+                <h3 className="font-semibold text-foreground">{stockName}</h3>
                 {/* <p className="text-sm text-muted-foreground">{stock.name}</p> */}
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold text-foreground">${stock.recentClosePrice}</p>
+                <p className="text-xl font-bold text-foreground">${stockPrice}</p>
                 <div className="flex items-center gap-1">
-                  {stock.change > 0 ? (
+                  {stockChange > 0 ? (
                     <TrendingUp className="h-4 w-4 text-green-600" />
                   ) : (
                     <TrendingDown className="h-4 w-4 text-red-600" />
                   )}
-                  <span className={stock.change > 0 ? "text-green-600" : "text-red-600"}>
-                    {stock.changeRate > 0 ? "+" : ""}
-                    {stock.changeRate}%
+                  <span className={stockChange > 0 ? "text-green-600" : "text-red-600"}>
+                    {stockChangeRate > 0 ? "+" : ""}
+                    {stockChangeRate}%
                   </span>
                 </div>
               </div>
@@ -122,13 +129,13 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
               id="quantity"
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
+              onChange={(e) => setQuantity(e.target.value)}
               placeholder="Enter Number of Shares"
             />
           </div>
 
           {/* Total Value */}
-          {quantity && (
+          {Number(quantity) > 0 && (
             <div className="bg-muted/50 rounded-lg p-4">
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Estimated Total Value</span>

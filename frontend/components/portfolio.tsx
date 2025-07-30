@@ -10,6 +10,9 @@ import { HistoryItem } from "@/types/history"
 import { useEffect, useState } from "react"
 import { setDefaultResultOrder } from "dns"
 import { PortfolioApiResponse, PortfolioData } from "@/types/portfolio"
+import { Button } from "./ui/button"
+import Operation from "./operation"
+import TradingModal from "./trading-modal"
 
 // Mock portfolio data
 const mockPortfolioData = {
@@ -63,8 +66,11 @@ const mockPortfolioData = {
 
 export default function Portfolio() {
   const [portfolioDataList, setPortfolioDataList] = useState<PortfolioData[]>();
+  const [selectedStock, setSelectedStock] = useState<PortfolioData>();
   const [summary, setSummary] = useState<PortfolioApiResponse["summary"]>();
   const [error, setError] = useState<String>();
+  const [tradeAction, setTradeAction] = useState<"buy" | "sell">("buy");
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     fetchPortfolio()
@@ -81,6 +87,12 @@ export default function Portfolio() {
 
   if (error) return <div className="p-4 text-red-600">{error}</div>
   // if (!portfolioDataList) return <div className="p-4">Loading...</div>
+
+  const handleTrade = (stock: any, type: "buy" | "sell") => {
+    setSelectedStock(stock);
+    setTradeAction(type);
+    setModalOpen(true);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -163,7 +175,7 @@ export default function Portfolio() {
                 <div className="space-y-4">
                   {portfolioDataList.map((portfolioData) => (
                     <div key={portfolioData.tickerId} className="bg-muted/30 rounded-lg p-4">
-                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-[3fr_3fr_3fr_1fr] gap-4">
                         {/* Stock Info */}
                         <div className="flex items-center justify-between lg:justify-start gap-4">
                           <div>
@@ -212,6 +224,24 @@ export default function Portfolio() {
                             </div>
                           </div>
                         </div>
+
+                        {/* Operations */}
+                        {/* <Operation onTrade={handleTrade} direction="row"></Operation> */}
+                        <div className="flex items-center justify-center flex-col gap-1">
+                            <Button
+                              onClick={() => handleTrade(portfolioData, "buy")}
+                              className="h-7 min-w-[64px] px-2 text-xs bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              Buy
+                            </Button>
+                            <Button
+                              onClick={() => handleTrade(portfolioData, "sell")}
+                              variant="outline"
+                              className="h-7 min-w-[64px] px-2 text-xs border-red-600 text-red-600 hover:bg-red-600/10"
+                            >
+                              Sell
+                            </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -228,7 +258,18 @@ export default function Portfolio() {
             ))}
           </>
         )}
-        
+        {selectedStock && (
+          <TradingModal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            stockId={selectedStock.tickerId}
+            stockName={selectedStock.ticker} 
+            stockPrice={selectedStock.currentPrice} 
+            stockChange={selectedStock.profit} 
+            stockChangeRate={selectedStock.profitRate} 
+            type={tradeAction} >
+          </TradingModal> 
+        )}
       </div>
     </div>
   )

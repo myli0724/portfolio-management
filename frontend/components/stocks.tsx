@@ -295,9 +295,12 @@ export default function Stocks() {
         <TradingModal
           isOpen={tradingModalOpen}
           onClose={() => setTradingModalOpen(false)}
-          stock={selectedStock}
-          type={tradingType}
-        />
+          stockId={selectedStock.id}
+          stockName={selectedStock.tickerName} 
+          stockPrice={selectedStock.recentClosePrice} 
+          stockChange={selectedStock.change} 
+          stockChangeRate={selectedStock.changeRate} 
+          type={tradingType} />
       )}
     </div>
   )

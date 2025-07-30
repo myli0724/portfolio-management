@@ -1,4 +1,5 @@
 import { Stock, transformStockData } from "@/types/stock";
+import { CURRENT_USER_ID } from "@/lib/constants"
 
 const API_BASE = "http://localhost:3001";
 
@@ -26,8 +27,8 @@ export async function fetchStockByKeyWord(tickerName: string): Promise<Stock> {
     return transformStockData(json.data, json.data.id);
 }
 
-export async function tradeStock(stockId: number, type: "buy" | "sell", quantity: number, price: number) {
-  const endpoint = `/api/stocks/${stockId}/${type}`
+export async function tradeStock(tickerId: number, type: "buy" | "sell", quantity: number, price: number) {
+  const endpoint = `${API_BASE}/stocks/${CURRENT_USER_ID}/${type}`
 
   const res = await fetch(endpoint, {
     method: "POST",
@@ -35,6 +36,7 @@ export async function tradeStock(stockId: number, type: "buy" | "sell", quantity
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      tickerId,
       quantity,
       price,
     }),
@@ -47,4 +49,3 @@ export async function tradeStock(stockId: number, type: "buy" | "sell", quantity
 
   return res.json()
 }
-
