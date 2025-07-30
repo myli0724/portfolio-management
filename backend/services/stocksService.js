@@ -1,4 +1,5 @@
 const supabase = require("../db");
+const portfolioService = require("./portfolioService");
 
 exports.getStockDetails = async (tickerId) => {
     // 获取 ticker 信息
@@ -67,5 +68,13 @@ exports.getStockDetailsByName = async (tickerName) => {
 
     // 复用已有的 getStockDetails 方法
     return await exports.getStockDetails(tickerData.id);
+};
+
+exports.buyStock = async (userId, tickerId, quantity, price) => {
+    return await portfolioService.buyStock(userId, tickerId, quantity, price);
+};
+
+exports.sellStock = async (userId, tickerId, quantity) => {
+    return await portfolioService.sellStock(userId, tickerId, quantity);
 };
 
