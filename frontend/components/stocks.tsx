@@ -12,6 +12,7 @@ import TradingModal from "@/components/trading-modal"
 import { fetchStockById, fetchStockByKeyWord, tradeStock } from "@/services/stocksService"
 import { Stock } from "@/types/stock"
 import Operation from "./operation"
+import { useI18n } from "./i18n-provider"
 
 // Mock data
 const mockStocks = [
@@ -66,6 +67,7 @@ const marketIndices = [
 ]
 
 export default function Stocks() {
+  const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedStockId, setSelectedStockId] = useState(1);
   const [selectedStock, setSelectedStock] = useState<Stock>()
@@ -82,7 +84,7 @@ export default function Stocks() {
       })
       .catch((err) => {
         console.log(err);
-        setError("Can't get portfolio data from the server...")
+        setError(t("stocks.errorFetchData"))
       })
   }, [selectedStockId]);
 
@@ -118,7 +120,7 @@ export default function Stocks() {
       })
       .catch((err) => {
         console.log(err);
-        setError("Can't get portfolio data from the server...")
+        setError(t("stocks.errorFetchData"))
       })
       .finally(() => {
         setLoading(false);
@@ -132,8 +134,8 @@ export default function Stocks() {
       <div className="lg:ml-64 p-4 lg:p-8 mobile-content lg:desktop-content">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Stocks Dashboard</h1>
-          <p className="text-muted-foreground">Real-time Market Data & Investment Opportunities</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t("stocks.title")}</h1>
+          <p className="text-muted-foreground">{t("stocks.subtitle")}</p>
         </div>
 
         {/* Market Overview */}
@@ -167,7 +169,7 @@ export default function Stocks() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="Search for Index or Company Name..." 
+              placeholder={t("stocks.searchPlaceholder")} 
               value={searchQuery}
               onChange={handleSearch}
               onKeyDown={handleKeyDown}
@@ -177,7 +179,7 @@ export default function Stocks() {
               {loading ? (
                 <Loader2 className="animate-spin h-4 w-4" />
               ) : (
-                "Search"
+                t("stocks.search")
               )}
             </Button>
           </div>
@@ -188,7 +190,7 @@ export default function Stocks() {
           {/* Stock Chart */}
           {error !== "" ? (
             <div className="xl:col-span-2 text-center text-red-600 mt-4">
-              No matching stock found.
+              {t("stocks.noMatchingStock")}
             </div>
           ) : (
             <div className="xl:col-span-2">
@@ -219,30 +221,30 @@ export default function Stocks() {
                   <div className="space-y-2 text-sm text-muted-foreground px-6 pb-2">
                     <div className="grid grid-cols-3 gap-4">
                       <div>
-                        <span className="font-semibold">Opening Price:</span> ${selectedStock?.recentOpenPrice}
+                        <span className="font-semibold">{t("stocks.openingPrice")}:</span> ${selectedStock?.recentOpenPrice}
                       </div>
                       <div>
-                        <span className="font-semibold">Closing Price:</span> ${selectedStock?.recentClosePrice}
+                        <span className="font-semibold">{t("stocks.closingPrice")}:</span> ${selectedStock?.recentClosePrice}
                       </div>
                       <div>
-                        <span className="font-semibold">Date:</span> {selectedStock?.date}
+                        <span className="font-semibold">{t("stocks.date")}:</span> {selectedStock?.date}
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <span className="font-semibold">Highest:</span> ${selectedStock?.high}
+                        <span className="font-semibold">{t("stocks.highest")}:</span> ${selectedStock?.high}
                       </div>
                       <div>
-                        <span className="font-semibold">Lowest:</span> ${selectedStock?.low}
+                        <span className="font-semibold">{t("stocks.lowest")}:</span> ${selectedStock?.low}
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <span className="font-semibold">Volume:</span> {selectedStock?.volume}
+                        <span className="font-semibold">{t("stocks.volume")}:</span> {selectedStock?.volume}
                       </div>
                       <div>
-                        <span className="font-semibold">Market Cap:</span> {selectedStock?.marketValue}
+                        <span className="font-semibold">{t("stocks.marketCap")}:</span> {selectedStock?.marketValue}
                       </div>
                     </div>
                   </div>
@@ -257,14 +259,14 @@ export default function Stocks() {
                         onClick={() => handleTrade(selectedStock, "buy")}
                         className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1 text-white"
                     >
-                        Buy
+                        {t("portfolio.buy")}
                     </Button>
                     <Button
                         onClick={() => handleTrade(selectedStock, "sell")}
                         variant="outline"
                         className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1"
                     >
-                        Sell
+                        {t("portfolio.sell")}
                     </Button>
                 </div>
                 </CardContent>
@@ -278,7 +280,7 @@ export default function Stocks() {
           <div>
             <Card className="border">
               <CardHeader>
-                <CardTitle className="text-foreground">Popular Stocks</CardTitle>
+                <CardTitle className="text-foreground">{t("stocks.popularStocks")}</CardTitle>
               </CardHeader>
               <CardContent>
                 {selectedStock && (

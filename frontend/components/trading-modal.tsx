@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown } from "lucide-react"
 import { Stock } from "@/types/stock"
 import { tradeStock } from "@/services/stocksService"
+import { useI18n } from "./i18n-provider"
 
 interface TradingModalProps {
   isOpen: boolean
@@ -22,6 +23,7 @@ interface TradingModalProps {
 }
 
 export default function TradingModal({ isOpen, onClose, stockId, stockName, stockPrice, stockChange, stockChangeRate, type }: TradingModalProps) {
+  const { t } = useI18n();
   const [quantity, setQuantity] = useState("")
   const [orderType, setOrderType] = useState<"market" | "limit">("market")
   const [limitPrice, setLimitPrice] = useState("")
@@ -41,7 +43,7 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
       }, 1500)
     } catch (err: any) {
       console.error("❌ Trade Error:", err);
-      setError("Trade failed, please try again.");
+      setError(t("trading.tradeFailed"));
     } 
   }
 
@@ -50,9 +52,9 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {type === "buy" ? "Buy" : "Sell"} {stockName}
+            {type === "buy" ? t("portfolio.buy") : t("portfolio.sell")} {stockName}
             <Badge variant={type === "buy" ? "default" : "destructive"} className="ml-2">
-              {type === "buy" ? "Buy" : "Sell"}
+              {type === "buy" ? t("portfolio.buy") : t("portfolio.sell")}
             </Badge>
           </DialogTitle>
         </DialogHeader>
@@ -84,21 +86,21 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
 
           {/* Order Type */}
           <div>
-            <Label className="text-foreground mb-2 block">Order Type</Label>
+            <Label className="text-foreground mb-2 block">{t("trading.orderType")}</Label>
             <div className="flex gap-2">
               <Button
                 variant={orderType === "market" ? "default" : "outline"}
                 onClick={() => setOrderType("market")}
                 className="flex-1"
               >
-                Market Order
+                {t("trading.marketOrder")}
               </Button>
               <Button
                 variant={orderType === "limit" ? "default" : "outline"}
                 onClick={() => setOrderType("limit")}
                 className="flex-1"
               >
-                Limit Order
+                {t("trading.limitOrder")}
               </Button>
             </div>
           </div>
@@ -107,7 +109,7 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
           {orderType === "limit" && (
             <div>
               <Label htmlFor="limitPrice" className="text-foreground">
-                Limit Price
+                {t("trading.limitPrice")}
               </Label>
               <Input
                 id="limitPrice"
@@ -115,7 +117,7 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
                 step="0.01"
                 value={limitPrice}
                 onChange={(e) => setLimitPrice(e.target.value)}
-                placeholder="Enter Limit Price"
+                placeholder={t("trading.enterLimitPrice")}
               />
             </div>
           )}
@@ -123,14 +125,14 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
           {/* Quantity */}
           <div>
             <Label htmlFor="quantity" className="text-foreground">
-              Quantity
+              {t("trading.quantity")}
             </Label>
             <Input
               id="quantity"
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
-              placeholder="Enter Number of Shares"
+              placeholder={t("trading.enterShares")}
             />
           </div>
 
@@ -138,7 +140,7 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
           {Number(quantity) > 0 && (
             <div className="bg-muted/50 rounded-lg p-4">
               <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Estimated Total Value</span>
+                <span className="text-muted-foreground">{t("trading.estimatedTotal")}</span>
                 <span className="text-xl font-bold text-foreground">${totalValue.toFixed(2)}</span>
               </div>
             </div>
@@ -147,14 +149,14 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
           {/* Action Buttons */}
           <div className="flex gap-3">
             <Button variant="outline" onClick={onClose} className="flex-1 bg-transparent">
-              Cancel
+              {t("trading.cancel")}
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={!quantity}
               className={`flex-1 text-white ${type === "buy" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
             >
-              Confirm{type === "buy" ? " Buy" : " Sell"}
+              {t("trading.confirm")}{type === "buy" ? ` ${t("portfolio.buy")}` : ` ${t("portfolio.sell")}`}
             </Button>
           </div>
         </div>

@@ -1,0 +1,79 @@
+{
+  "common": {
+    "appName": "智投寶",
+    "theme": {
+      "light": "淺色",
+      "dark": "深色"
+    },
+    "language": {
+      "en": "英文",
+      "zh-CN": "簡體中文",
+      "zh-TW": "繁體中文",
+      "es": "西班牙語"
+    }
+  },
+  "navigation": {
+    "portfolio": "投資組合",
+    "stocks": "股票",
+    "watchlist": "關注列表",
+    "market": "市場",
+    "profile": "個人資料",
+    "settings": "設置"
+  },
+  "portfolio": {
+    "title": "投資組合",
+    "subtitle": "投資表現概覽",
+    "totalAssets": "總資產",
+    "totalGainLoss": "總收益/虧損",
+    "dailyChange": "日變化",
+    "numberOfHoldings": "持倉數量",
+    "stocks": "支股票",
+    "holdingsBreakdown": "持倉明細",
+    "currentPrice": "當前價格",
+    "avgPurchasePrice": "平均購買價格",
+    "marketValue": "市值",
+    "gainLoss": "收益/虧損",
+    "shares": "股",
+    "share": "股",
+    "buy": "買入",
+    "sell": "賣出",
+    "loading": "加載中...",
+    "error": "無法從伺服器獲取投資組合數據..."
+  },
+  "trading": {
+    "orderType": "訂單類型",
+    "marketOrder": "市價訂單",
+    "limitOrder": "限價訂單",
+    "limitPrice": "限價",
+    "quantity": "數量",
+    "enterLimitPrice": "輸入限價",
+    "enterShares": "輸入股票數量",
+    "estimatedTotal": "預估總價值",
+    "cancel": "取消",
+    "confirm": "確認",
+    "tradeFailed": "交易失敗，請重試。"
+  },
+  "stocks": {
+    "title": "股票看板",
+    "subtitle": "實時市場數據與投資機會",
+    "searchPlaceholder": "搜索指數或公司名稱...",
+    "search": "搜索",
+    "popularStocks": "熱門股票",
+    "openingPrice": "開盤價",
+    "closingPrice": "收盤價",
+    "date": "日期",
+    "highest": "最高價",
+    "lowest": "最低價",
+    "volume": "成交量",
+    "marketCap": "市值",
+    "noStock": "未找到匹配的股票。"
+  },
+  "market": {
+    "title": "市場洞察",
+    "subtitle": "了解最新市場趨勢和投資新聞",
+    "searchPlaceholder": "搜索新聞...",
+    "all": "全部",
+    "loadMore": "加載更多新聞",
+    "relatedStocks": "相關股票"
+  }
+}

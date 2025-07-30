@@ -1,0 +1,79 @@
+{
+  "common": {
+    "appName": "InvestPro",
+    "theme": {
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "language": {
+      "en": "Inglés",
+      "zh-CN": "Chino Simplificado",
+      "zh-TW": "Chino Tradicional",
+      "es": "Español"
+    }
+  },
+  "navigation": {
+    "portfolio": "Portafolio",
+    "stocks": "Acciones",
+    "watchlist": "Lista de Seguimiento",
+    "market": "Mercado",
+    "profile": "Perfil",
+    "settings": "Configuración"
+  },
+  "portfolio": {
+    "title": "Portafolio",
+    "subtitle": "Resumen del Rendimiento de Inversión",
+    "totalAssets": "Activos Totales",
+    "totalGainLoss": "Ganancia/Pérdida Total",
+    "dailyChange": "Cambio Diario",
+    "numberOfHoldings": "Número de Posiciones",
+    "stocks": "acciones",
+    "holdingsBreakdown": "Desglose de Posiciones",
+    "currentPrice": "Precio Actual",
+    "avgPurchasePrice": "Precio Promedio de Compra",
+    "marketValue": "Valor de Mercado",
+    "gainLoss": "Ganancia/Pérdida",
+    "shares": "Acciones",
+    "share": "Acción",
+    "buy": "Comprar",
+    "sell": "Vender",
+    "loading": "Cargando...",
+    "error": "No se pueden obtener datos del portafolio desde el servidor..."
+  },
+  "trading": {
+    "orderType": "Tipo de Orden",
+    "marketOrder": "Orden de Mercado",
+    "limitOrder": "Orden Limitada",
+    "limitPrice": "Precio Límite",
+    "quantity": "Cantidad",
+    "enterLimitPrice": "Ingrese Precio Límite",
+    "enterShares": "Ingrese Número de Acciones",
+    "estimatedTotal": "Valor Total Estimado",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "tradeFailed": "Operación fallida, por favor intente nuevamente."
+  },
+  "stocks": {
+    "title": "Panel de Acciones",
+    "subtitle": "Datos de Mercado en Tiempo Real y Oportunidades de Inversión",
+    "searchPlaceholder": "Busca Índice o Nombre de Empresa...",
+    "search": "Buscar",
+    "popularStocks": "Acciones Populares",
+    "openingPrice": "Precio de Apertura",
+    "closingPrice": "Precio de Cierre",
+    "date": "Fecha",
+    "highest": "Más Alto",
+    "lowest": "Más Bajo",
+    "volume": "Volumen",
+    "marketCap": "Capitalización de Mercado",
+    "noStock": "No se encontró ninguna acción coincidente."
+  },
+  "market": {
+    "title": "Perspectivas del Mercado",
+    "subtitle": "Manténgase actualizado con las últimas tendencias del mercado y noticias de inversión",
+    "searchPlaceholder": "Buscar Noticias...",
+    "all": "Todos",
+    "loadMore": "Cargar Más Noticias",
+    "relatedStocks": "Acciones Relacionadas"
+  }
+}

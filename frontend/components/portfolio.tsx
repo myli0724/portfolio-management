@@ -13,6 +13,7 @@ import { PortfolioApiResponse, PortfolioData } from "@/types/portfolio"
 import { Button } from "./ui/button"
 import Operation from "./operation"
 import TradingModal from "./trading-modal"
+import { useI18n } from "@/components/i18n-provider"
 
 // Mock portfolio data
 const mockPortfolioData = {
@@ -65,6 +66,7 @@ const mockPortfolioData = {
 }
 
 export default function Portfolio() {
+  const { t } = useI18n();
   const [portfolioDataList, setPortfolioDataList] = useState<PortfolioData[]>();
   const [selectedStock, setSelectedStock] = useState<PortfolioData>();
   const [summary, setSummary] = useState<PortfolioApiResponse["summary"]>();
@@ -81,7 +83,7 @@ export default function Portfolio() {
       })
       .catch((err) => {
         console.log(err);
-        setError("Can't get portfolio data from the server...")
+        setError(t("portfolio.error"))
       })
   }, []);
 
@@ -101,8 +103,8 @@ export default function Portfolio() {
       <div className="lg:ml-64 p-4 lg:p-8 mobile-content lg:desktop-content">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Portfolio</h1>
-          <p className="text-muted-foreground">Investment Performance Overview</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t("portfolio.title")}</h1>
+          <p className="text-muted-foreground">{t("portfolio.subtitle")}</p>
         </div>
 
         {/* Portfolio Overview */}
@@ -111,7 +113,7 @@ export default function Portfolio() {
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <DollarSign className="h-5 w-5 text-green-600" />
-                <span className="text-muted-foreground text-sm">Total Assets</span>
+                <span className="text-muted-foreground text-sm">{t("portfolio.totalAssets")}</span>
               </div>
               <p className="text-2xl font-bold text-foreground">${summary?.totalValue.toLocaleString()}</p>
             </CardContent>
@@ -121,7 +123,7 @@ export default function Portfolio() {
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="h-5 w-5" />
-                <span className="text-muted-foreground text-sm">Total Gain/Loss</span>
+                <span className="text-muted-foreground text-sm">{t("portfolio.totalGainLoss")}</span>
               </div>
               {summary?.totalProfit !== undefined && (
                 <>
@@ -138,7 +140,7 @@ export default function Portfolio() {
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <Percent className="h-5 w-5" />
-                <span className="text-muted-foreground text-sm">Daily Change</span>
+                <span className="text-muted-foreground text-sm">{t("portfolio.dailyChange")}</span>
               </div>
               {summary?.todayChange !== undefined && (
                 <>
@@ -156,10 +158,10 @@ export default function Portfolio() {
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-2">
                 <PieChart className="h-5 w-5 text-blue-600" />
-                <span className="text-muted-foreground text-sm">Number of Holdings</span>
+                <span className="text-muted-foreground text-sm">{t("portfolio.numberOfHoldings")}</span>
               </div>
               <p className="text-2xl font-bold text-foreground">{summary?.holdingCount}</p>
-              <p className="text-sm text-muted-foreground">stocks</p>
+              <p className="text-sm text-muted-foreground">{t("portfolio.stocks")}</p>
             </CardContent>
           </Card>
         </div>
@@ -169,7 +171,7 @@ export default function Portfolio() {
             {/* Holdings */}
             <Card className="border">
               <CardHeader>
-                <CardTitle className="text-foreground">Holdings Breakdown</CardTitle>
+                <CardTitle className="text-foreground">{t("portfolio.holdingsBreakdown")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -181,7 +183,7 @@ export default function Portfolio() {
                           <div>
                             <h3 className="font-semibold text-foreground">{portfolioData.ticker}</h3>
                             {/* <p className="text-sm text-muted-foreground">{portfolioData.name}</p> */}
-                            <p className="text-xs text-muted-foreground">{portfolioData.shares} {portfolioData.shares > 1 ? "Shares" : "Share"}</p>
+                            <p className="text-xs text-muted-foreground">{portfolioData.shares} {portfolioData.shares > 1 ? t("portfolio.shares") : t("portfolio.share")}</p>
                           </div>
                           <Badge
                             variant={portfolioData.profit > 0 ? "default" : "destructive"}
@@ -199,19 +201,19 @@ export default function Portfolio() {
                         {/* Performance */}
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
-                            <p className="text-muted-foreground">Current Price</p>
+                            <p className="text-muted-foreground">{t("portfolio.currentPrice")}</p>
                             <p className="font-semibold text-foreground">${portfolioData.currentPrice.toFixed(2)}</p>
                           </div>
                           <div>
-                            <p className="text-muted-foreground">Avg Purchase Price</p>
+                            <p className="text-muted-foreground">{t("portfolio.avgPurchasePrice")}</p>
                             <p className="font-semibold text-foreground">NULL</p>
                           </div>
                           <div>
-                            <p className="text-muted-foreground">Market Value</p>
+                            <p className="text-muted-foreground">{t("portfolio.marketValue")}</p>
                             <p className="font-semibold text-foreground">${portfolioData.totalValue.toLocaleString()}</p>
                           </div>
                           <div>
-                            <p className="text-muted-foreground">Gain/Loss</p>
+                            <p className="text-muted-foreground">{t("portfolio.gainLoss")}</p>
                             <div className="flex items-center gap-1">
                               {portfolioData.profit > 0 ? (
                                 <TrendingUp className="h-3 w-3 text-green-600" />
@@ -232,14 +234,14 @@ export default function Portfolio() {
                               onClick={() => handleTrade(portfolioData, "buy")}
                               className="h-7 min-w-[64px] px-2 text-xs bg-green-600 hover:bg-green-700 text-white"
                             >
-                              Buy
+                              {t("portfolio.buy")}
                             </Button>
                             <Button
                               onClick={() => handleTrade(portfolioData, "sell")}
                               variant="outline"
                               className="h-7 min-w-[64px] px-2 text-xs border-red-600 text-red-600 hover:bg-red-600/10"
                             >
-                              Sell
+                              {t("portfolio.sell")}
                             </Button>
                         </div>
                       </div>
