@@ -19,44 +19,44 @@ const mockStocks = [
   {
     id: 1,
     tickerName: "AAPL",
-    recentOpenPrice: 175.43,
-    recentClosePrice: 182.98,
+    recentOpenPrice: 213.88,
+    recentClosePrice: 214.70,
     date: "2025-07-25",
-    marketValue: 2.8,
-    volume: 45.2,
-    high: 215.4,
-    low: 213.24,
-    change: -1.26,
-    changeRate: -0.41,
-    history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
+    marketValue: Number('8.63B'),
+    volume: Number('40.2M'),
+    high: 215.24,
+    low: 213.40,
+    change: -1.84,
+    changeRate: -0.86,
+    history: [{"date":"2024-07-25","close":214.70},{"date":"2024-07-24","close":213.90},{"date":"2024-07-23","close":215.0},{"date":"2024-07-22","close":213.14},{"date":"2024-07-21","close":212.10},{"date":"2024-07-18","close":210.87},{"date":"2024-07-17","close":210.57},{"date":"2024-07-16","close":210.30},{"date":"2024-07-15","close":209.22},{"date":"2024-07-14","close":209.93},{"date":"2024-07-11","close":210.57},{"date":"2024-07-10","close":210.51},{"date":"2024-07-09","close":209.53},{"date":"2024-07-08","close":210.10}]
   },
   {
-    id: 2,
-    tickerName: "TSLA",
-    recentOpenPrice: 175.43,
-    recentClosePrice: 182.98,
+    id: 4,
+    tickerName: "GOLD",
+    recentOpenPrice: 3334.0,
+    recentClosePrice: 3344.0,
     date: "2025-07-25",
-    marketValue: 2.8,
-    volume: 45.2,
-    high: 215.4,
-    low: 213.24,
-    change: -1.26,
-    changeRate: -0.41,
-    history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
+    marketValue: Number('3.9M'),
+    volume: 1175,
+    high: 3345.0,
+    low: 3326.5,
+    change: 10.0,
+    changeRate: -0.29,
+    history: [{"date":"2024-07-25","close":3344.0},{"date":"2024-07-24","close":3367.0},{"date":"2024-07-23","close":3430.30},{"date":"2024-07-22","close":3411.0},{"date":"2024-07-21","close":3350.30},{"date":"2024-07-18","close":3338.20},{"date":"2024-07-17","close":3313.80},{"date":"2024-07-16","close":3341.20},{"date":"2024-07-15","close":3341.0},{"date":"2024-07-14","close":3367.0},{"date":"2024-07-11","close":3330.5},{"date":"2024-07-10","close":3323.60},{"date":"2024-07-09","close":3289.40},{"date":"2024-07-08","close":3330.40}]
   },
   {
     id: 3,
-    tickerName: "MSFT",
-    recentOpenPrice: 175.43,
-    recentClosePrice: 182.98,
+    tickerName: "DOW",
+    recentOpenPrice: 25.51,
+    recentClosePrice: 24.64,
     date: "2025-07-25",
-    marketValue: 2.8,
-    volume: 45.2,
-    high: 215.4,
-    low: 213.24,
-    change: -1.26,
-    changeRate: -0.41,
-    history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
+    marketValue: Number('909.4M'),
+    volume: Number('36.9M'),
+    high: 25.65,
+    low: 24.42,
+    change: -0.88,
+    changeRate: -3.41,
+    history: [{"date":"2024-07-25","close":24.42},{"date":"2024-07-24","close":27.19},{"date":"2024-07-23","close":30.21},{"date":"2024-07-22","close":28.46},{"date":"2024-07-21","close":28.59},{"date":"2024-07-18","close":28.65},{"date":"2024-07-17","close":28.01},{"date":"2024-07-16","close":27.96},{"date":"2024-07-15","close":28.67},{"date":"2024-07-14","close":29.65},{"date":"2024-07-11","close":29.62},{"date":"2024-07-10","close":29.70},{"date":"2024-07-09","close":29.36},{"date":"2024-07-08","close":27.71}]
   }
 ]
 
@@ -219,7 +219,7 @@ export default function Stocks() {
                 </CardHeader>
                 <CardDescription>
                   <div className="space-y-2 text-sm text-muted-foreground px-6 pb-2">
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-3 gap-3">
                       <div>
                         <span className="font-semibold">{t("stocks.openingPrice")}:</span> ${selectedStock?.recentOpenPrice}
                       </div>
@@ -231,7 +231,7 @@ export default function Stocks() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-3">
                       <div>
                         <span className="font-semibold">{t("stocks.highest")}:</span> ${selectedStock?.high}
                       </div>
@@ -239,12 +239,15 @@ export default function Stocks() {
                         <span className="font-semibold">{t("stocks.lowest")}:</span> ${selectedStock?.low}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-3">
                       <div>
                         <span className="font-semibold">{t("stocks.volume")}:</span> {selectedStock?.volume}
                       </div>
                       <div>
                         <span className="font-semibold">{t("stocks.marketCap")}:</span> {selectedStock?.marketValue}
+                      </div>
+                      <div className="text-right">
+                        <span className="font-semibold">Date:</span> {selectedStock?.date}
                       </div>
                     </div>
                   </div>
@@ -304,11 +307,11 @@ export default function Stocks() {
           isOpen={tradingModalOpen}
           onClose={() => setTradingModalOpen(false)}
           stockId={selectedStock.id}
-          stockName={selectedStock.tickerName} 
-          stockPrice={selectedStock.recentClosePrice} 
-          stockChange={selectedStock.change} 
-          stockChangeRate={selectedStock.changeRate} 
-          type={tradingType} />
+          stockName={selectedStock.tickerName}
+          stockPrice={selectedStock.recentClosePrice}
+          stockChange={selectedStock.change}
+          stockChangeRate={selectedStock.changeRate}
+          type={tradingType} userBalance={0} />
       )}
     </div>
   )

@@ -11,6 +11,12 @@ export type PortfolioData = {
   history: HistoryItem[]
 }
 
+export type Balance = {
+    totalBalance: number,
+    availableBalance: number,
+    assets: number
+}
+
 export type PortfolioApiResponse = {
   summary: {
     totalValue: number;
@@ -21,4 +27,13 @@ export type PortfolioApiResponse = {
     holdingCount: number;
   };
   holdings: PortfolioData[];
+  user: Balance
+}
+
+export function transformBalanceData(raw: any): Balance {
+  return {
+    totalBalance: raw.total_balance,
+    availableBalance: raw.available_balance,
+    assets: raw.assets
+  }
 }

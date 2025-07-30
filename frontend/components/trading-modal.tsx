@@ -19,33 +19,71 @@ interface TradingModalProps {
   stockPrice: number
   stockChange: number
   stockChangeRate: number
+  userBalance: number
+  shares: number
   type: "buy" | "sell"
+  onTradeComplete: (newData: any) => void
 }
 
-export default function TradingModal({ isOpen, onClose, stockId, stockName, stockPrice, stockChange, stockChangeRate, type }: TradingModalProps) {
   const { t } = useI18n();
+export default function TradingModal({ isOpen, onClose, stockId, stockName, stockPrice, stockChange, stockChangeRate, userBalance, shares, type, onTradeComplete }: TradingModalProps) {
   const [quantity, setQuantity] = useState("")
   const [orderType, setOrderType] = useState<"market" | "limit">("market")
   const [limitPrice, setLimitPrice] = useState("")
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const totalValue = Number(quantity) * stockPrice || 0
+  const totalValue = Number(quantity) * stockPrice || 0;
+  const insufficientFunds = type === "buy" && totalValue > userBalance;
+  const isSellOverHoldings = type === "sell" && Number(quantity) > shares;
 
   const handleSubmit = async () => {
+    setLoading(true);
+    setError("");
     try {
       const res = await tradeStock(stockId, type, Number(quantity), stockPrice);
-      console.log("✅ Trade Success:", res);
+      onTradeComplete(res.result.user);
+      setSuccess(true);
       setQuantity("");
-      // setSuccess(true)
       setTimeout(() => {
-        // setSuccess(false)
-        onClose()
-      }, 1500)
+        setSuccess(false);
+        onClose();
+      }, 1500);
     } catch (err: any) {
       console.error("❌ Trade Error:", err);
-      setError(t("trading.tradeFailed"));
-    } 
+
+      setError("Trade failed, please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
+
+  const handleCancel = () => {
+    setQuantity("");
+    setLimitPrice("");
+    setError("");
+    setSuccess(false);
+    setLoading(false);
+    setOrderType("market");
+    onClose();
+  }
+
+  // const handleSubmit = async () => {
+  //   try {
+  //     const res = await tradeStock(stockId, type, Number(quantity), stockPrice);
+  //     console.log("✅ Trade Success:", res);
+  //     setQuantity("");
+  //     // setSuccess(true)
+  //     setTimeout(() => {
+  //       // setSuccess(false)
+  //       onClose()
+  //     }, 1500)
+  //   } catch (err: any) {
+  //     console.error("❌ Trade Error:", err);
+  //     setError("Trade failed, please try again.");
+  //   } 
+  // }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -146,18 +184,43 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
             </div>
           )}
 
+          {success && <p className="text-green-600 text-sm">Trade finished!</p>}
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {insufficientFunds && (
+              <p className="text-sm text-red-600 mt-1">Insufficient funds. Your balance is ${userBalance.toFixed(2)}</p>
+          )}
+          {isSellOverHoldings && (
+              <p className="text-sm text-red-600 mt-1">Cannot sell {quantity} shares of {stockName}. You only own {shares} shares.</p>
+          )}
+
           {/* Action Buttons */}
           <div className="flex gap-3">
-            <Button variant="outline" onClick={onClose} className="flex-1 bg-transparent">
+            <Button variant="outline" onClick={handleCancel} className="flex-1 bg-transparent">
               {t("trading.cancel")}
             </Button>
             <Button
               onClick={handleSubmit}
+              disabled={!quantity || loading || insufficientFunds || isSellOverHoldings}
+              className={`flex-1 text-white ${
+                type === "buy" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
+              }`}
+            >
+              {loading ? "Processing..." : `Confirm ${type === "buy" ? "Buy" : "Sell"}`}
+            </Button>
+
+
+            {/* <Button
+              onClick={handleSubmit}
               disabled={!quantity}
               className={`flex-1 text-white ${type === "buy" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
             >
+
               {t("trading.confirm")}{type === "buy" ? ` ${t("portfolio.buy")}` : ` ${t("portfolio.sell")}`}
             </Button>
+=======
+              Confirm{type === "buy" ? " Buy" : " Sell"}
+            </Button> */}
+
           </div>
         </div>
       </DialogContent>
