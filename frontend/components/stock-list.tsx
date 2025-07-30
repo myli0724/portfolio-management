@@ -25,12 +25,13 @@ export default function StockList({
   const { t } = useI18n();
   return (
     <div className="space-y-3">
-      {stocks.map((stock) => (
+      {stocks.map((stock, index) => (
         <div
           key={stock.id}
-          className={`p-4 rounded-lg border transition-all duration-200 cursor-pointer hover:bg-muted/50 ${
+          className={`p-4 rounded-lg border transition-all duration-200 cursor-pointer hover:bg-muted/50 animate-fade-in ${
             selectedStock.id === stock.id ? "border-red-600 bg-red-600/10" : "border-border bg-muted/20"
           }`}
+          style={{ animationDelay: `${index * 100}ms` }}
           onClick={() => onSelectStock(stock)}
         >
           <div className="flex items-center justify-between mb-2">

@@ -183,8 +183,12 @@ export default function Market() {
 
         {/* News List */}
         <div className="space-y-6">
-          {filteredNews.map((news: NewsItem) => (
-            <Card key={news.id} className="border hover:shadow-lg transition-all duration-300">
+          {filteredNews.map((news: NewsItem, index: number) => (
+            <Card
+              key={news.id}
+              className="border hover:shadow-lg transition-all duration-300 animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               <CardContent className="p-0">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {/* Image */}

@@ -109,8 +109,12 @@ export default function Watchlist() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredWatchlist.map((stock) => (
-              <Card key={stock.id} className="border hover:shadow-lg transition-all duration-300">
+            {filteredWatchlist.map((stock, index) => (
+              <Card
+                key={stock.id}
+                className="border hover:shadow-lg transition-all duration-300 animate-fade-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>

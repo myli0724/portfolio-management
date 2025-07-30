@@ -8,6 +8,7 @@ import StockChart from "@/components/stock-chart"
 import { fetchPortfolio } from "@/services/portfolioService";
 import { HistoryItem } from "@/types/history"
 import { useEffect, useState } from "react"
+import useAnimatedCounter from "@/hooks/use-animated-counter"
 import { setDefaultResultOrder } from "dns"
 import { Balance, PortfolioApiResponse, PortfolioData, transformBalanceData } from "@/types/portfolio"
 import { Button } from "./ui/button"
@@ -75,6 +76,15 @@ export default function Portfolio() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState<Balance>();
 
+  const animatedTotalBalance = useAnimatedCounter(balance?.totalBalance || 0);
+  const animatedAssets = useAnimatedCounter(balance?.assets || 0);
+  const animatedAvailableBalance = useAnimatedCounter(balance?.availableBalance || 0);
+  const animatedTotalProfit = useAnimatedCounter(summary?.totalProfit || 0);
+  const animatedTotalChangeRate = useAnimatedCounter(summary?.totalChangeRate || 0);
+  const animatedTodayChange = useAnimatedCounter(summary?.todayChange || 0);
+  const animatedTodayChangeRate = useAnimatedCounter(summary?.todayChangeRate || 0);
+  const animatedHoldingCount = useAnimatedCounter(summary?.holdingCount || 0);
+
   useEffect(() => {
     fetchPortfolio()
       .then(data => {
@@ -117,84 +127,85 @@ export default function Portfolio() {
 
         {/* Portfolio Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          <Card className="border">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Banknote className="h-5 w-5 text-purple-600" />
-                {/* 总和 */}
-                <span className="text-muted-foreground text-sm">{t("portfolio.totalAssets")}</span>
-              </div>
-              <p className="text-2xl font-bold text-foreground">${balance?.totalBalance.toLocaleString()}</p>
-            </CardContent>
-          </Card>
+          {[ 
+            <Card className="border">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <Banknote className="h-5 w-5 text-purple-600" />
+                  {/* 总和 */}
+                  <span className="text-muted-foreground text-sm">{t("portfolio.totalAssets")}</span>
+                </div>
+                <p className="text-2xl font-bold text-foreground">${animatedTotalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              </CardContent>
+            </Card>,
+            <Card className="border">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <LineChart className="h-5 w-5 text-green-700" />
+                  <span className="text-muted-foreground text-sm">{t("portfolio.assets")}</span>
+                </div>
+                <p className="text-2xl font-bold text-foreground">${animatedAssets.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              </CardContent>
+            </Card>,
+            <Card className="border">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <DollarSign className="h-5 w-5 text-green-600" />
+                  <span className="text-muted-foreground text-sm">{t("portfolio.availableFunds")}</span>
+                </div>
+                <p className="text-2xl font-bold text-foreground">${animatedAvailableBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              </CardContent>
+            </Card>,
+            <Card className="border">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
 
-          <Card className="border">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <LineChart className="h-5 w-5 text-green-700" />
-                <span className="text-muted-foreground text-sm">{t("portfolio.assets")}</span>
-              </div>
-              <p className="text-2xl font-bold text-foreground">${balance?.assets.toLocaleString()}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="h-5 w-5 text-green-600" />
-                <span className="text-muted-foreground text-sm">{t("portfolio.availableFunds")}</span>
-              </div>
-              <p className="text-2xl font-bold text-foreground">${balance?.availableBalance.toLocaleString()}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-
-                <TrendingUp className={` h-5 w-5 ${ summary?.totalProfit && summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}/>
-                <span className="text-muted-foreground text-sm">{t("portfolio.totalGainLoss")}</span>
-              </div>
-              {summary?.totalProfit !== undefined && (
-                <>
-                  <p className={`text-2xl font-bold ${ summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>
-                    {summary.totalProfit >= 0 ? "+" : "-"}${Math.abs(summary.totalProfit).toLocaleString()}
+                  <TrendingUp className={` h-5 w-5 ${ summary?.totalProfit && summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}/>
+                  <span className="text-muted-foreground text-sm">{t("portfolio.totalGainLoss")}</span>
+                </div>
+                {summary?.totalProfit !== undefined && (
+                  <>
+                    <p className={`text-2xl font-bold ${ animatedTotalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>
+                    {animatedTotalProfit >= 0 ? "+" : "-"}${Math.abs(animatedTotalProfit).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
-                  <p className={`text-sm ${ summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>{summary?.totalChangeRate}%</p>
-                </>
-              )}
-            </CardContent>
-          </Card>
+                  <p className={`text-sm ${ animatedTotalProfit >= 0 ? "text-green-600" : "text-red-600" }`}>{animatedTotalChangeRate.toFixed(2)}%</p>
+                  </>
+                )}
+              </CardContent>
+            </Card>,
+            <Card className="border">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <Percent className={` h-5 w-5 ${ summary?.todayChange && summary?.todayChange >= 0 ? "text-green-600" : "text-red-600" }`} />
+                  <span className="text-muted-foreground text-sm">{t("portfolio.dailyChange")}</span>
 
-          <Card className="border">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Percent className={` h-5 w-5 ${ summary?.todayChange && summary?.todayChange >= 0 ? "text-green-600" : "text-red-600" }`} />
-                <span className="text-muted-foreground text-sm">{t("portfolio.dailyChange")}</span>
-
-              </div>
-              {summary?.todayChange !== undefined && (
-                <>
-                  <p className={`text-2xl font-bold ${ summary?.todayChange >= 0 ? "text-green-600" : "text-red-600" }`}>
-                    {summary.todayChange >= 0 ? "+" : "-"}${Math.abs(summary.todayChange).toLocaleString()}
+                </div>
+                {summary?.todayChange !== undefined && (
+                  <>
+                    <p className={`text-2xl font-bold ${ animatedTodayChange >= 0 ? "text-green-600" : "text-red-600" }`}>
+                    {animatedTodayChange >= 0 ? "+" : "-"}${Math.abs(animatedTodayChange).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
-                  <p className={`text-sm ${ summary?.todayChange >= 0 ? "text-green-600" : "text-red-600" }`}>{summary?.todayChangeRate}%</p>
-                </>
-              )}
-              
-            </CardContent>
-          </Card>
-
-          <Card className="border">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <PieChart className="h-5 w-5 text-blue-600" />
-                <span className="text-muted-foreground text-sm">{t("portfolio.numberOfHoldings")}</span>
-              </div>
-              <p className="text-2xl font-bold text-foreground">{summary?.holdingCount}</p>
-              <p className="text-sm text-muted-foreground">{t("portfolio.stocks")}</p>
-            </CardContent>
-          </Card>
+                  <p className={`text-sm ${ animatedTodayChange >= 0 ? "text-green-600" : "text-red-600" }`}>{animatedTodayChangeRate.toFixed(2)}%</p>
+                  </>
+                )}
+                
+              </CardContent>
+            </Card>,
+            <Card className="border">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <PieChart className="h-5 w-5 text-blue-600" />
+                  <span className="text-muted-foreground text-sm">{t("portfolio.numberOfHoldings")}</span>
+                </div>
+                <p className="text-2xl font-bold text-foreground">{Math.round(animatedHoldingCount)}</p>
+                <p className="text-sm text-muted-foreground">{t("portfolio.stocks")}</p>
+              </CardContent>
+            </Card>,
+          ].map((card, index) => (
+            <div key={index} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+              {card}
+            </div>
+          ))}
         </div>
         
         {portfolioDataList ? (
@@ -206,8 +217,12 @@ export default function Portfolio() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {portfolioDataList.map((portfolioData) => (
-                    <div key={portfolioData.tickerId} className="bg-muted/30 rounded-lg p-4">
+                  {portfolioDataList.map((portfolioData, index) => (
+                    <div
+                      key={portfolioData.tickerId}
+                      className="bg-muted/30 rounded-lg p-4 animate-fade-in"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
                       <div className="grid grid-cols-1 lg:grid-cols-[3fr_3fr_3fr_1fr] gap-4">
                         {/* Stock Info */}
                         <div className="flex items-center justify-between lg:justify-start gap-4">
