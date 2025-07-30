@@ -274,18 +274,17 @@ export default function Portfolio() {
                         </div>
 
                         {/* Operations */}
-                        {/* <Operation onTrade={handleTrade} direction="row"></Operation> */}
-                        <div className="flex items-center justify-center flex-col gap-1">
+                        <div className="flex items-center justify-center gap-2 md:flex-col md:gap-1">
                             <Button
                               onClick={() => handleTrade(portfolioData, "buy")}
-                              className="h-7 min-w-[64px] px-2 text-xs bg-green-600 hover:bg-green-700 text-white"
+                              className="h-8 md:h-7 px-3 md:min-w-[64px] md:px-2 text-sm md:text-xs bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
                             >
                               {t("portfolio.buy")}
                             </Button>
                             <Button
                               onClick={() => handleTrade(portfolioData, "sell")}
                               variant="outline"
-                              className="h-7 min-w-[64px] px-2 text-xs border-red-600 text-red-600 hover:bg-red-600/10"
+                              className="h-8 md:h-7 px-3 md:min-w-[64px] md:px-2 text-sm md:text-xs border-red-600 text-red-600 hover:bg-red-600/10 flex-1 md:flex-none"
                             >
                               {t("portfolio.sell")}
                             </Button>
