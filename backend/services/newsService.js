@@ -4,7 +4,10 @@ require('dotenv').config();
 
 const fetchAndStoreNews = async () => {
   try {
-    const response = await axios.get(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`);
+    // 使用当前时间戳作为apikey
+    const timestamp = Date.now();
+    //axios.get(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`);
+    const response = await axios.get(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${timestamp}`);
     const newsFeed = response.data.feed;
 
     if (!newsFeed) {

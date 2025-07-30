@@ -53,6 +53,7 @@
     "estimatedTotal": "Estimated Total Value",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "processing": "Processing...",
     "tradeFailed": "Trade failed, please try again."
   },
   "stocks": {
@@ -76,6 +77,12 @@
     "searchPlaceholder": "Search News...",
     "all": "All",
     "loadMore": "Load More News",
-    "relatedStocks": "Related Stocks"
+    "relatedStocks": "Related Stocks",
+    "summary": "Summary",
+    "readFullArticle": "Read Full Article",
+    "justNow": "Just now",
+    "hoursAgo": "{{hours}}h ago",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{days}}d ago"
   }
 }

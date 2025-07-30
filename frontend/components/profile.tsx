@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Mail, Phone, Calendar, TrendingUp, DollarSign, Award, Settings, Bell } from "lucide-react"
 import Navigation from "@/components/navigation"
+import useAnimatedCounter from "@/hooks/use-animated-counter"
 
 // Mock user data
 const userData = {
@@ -54,6 +55,11 @@ const userData = {
 }
 
 export default function Profile() {
+  const totalInvestment = useAnimatedCounter(userData.totalInvestment);
+  const totalGain = useAnimatedCounter(userData.totalGain);
+  const totalGainPercent = useAnimatedCounter(userData.totalGainPercent);
+  const winRate = useAnimatedCounter(userData.winRate);
+  const totalTrades = useAnimatedCounter(userData.totalTrades);
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -114,12 +120,13 @@ export default function Profile() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">
-                  {userData.achievements.map((achievement) => (
+                  {userData.achievements.map((achievement, index) => (
                     <div
                       key={achievement.id}
-                      className={`p-3 rounded-lg border text-center transition-all duration-200 ${
+                      className={`p-3 rounded-lg border text-center transition-all duration-200 animate-fade-in ${
                         achievement.earned ? "border-yellow-600 bg-yellow-600/10" : "border-border bg-muted/30"
                       }`}
+                      style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <Award
                         className={`h-6 w-6 mx-auto mb-2 ${achievement.earned ? "text-yellow-500" : "text-muted-foreground"}`}
@@ -147,7 +154,7 @@ export default function Profile() {
                     <DollarSign className="h-4 w-4 text-green-600" />
                     <span className="text-muted-foreground text-sm">Total Amount Invested</span>
                   </div>
-                  <p className="text-lg font-bold text-foreground">${userData.totalInvestment.toLocaleString()}</p>
+                  <p className="text-lg font-bold text-foreground">${totalInvestment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </CardContent>
               </Card>
 
@@ -157,8 +164,8 @@ export default function Profile() {
                     <TrendingUp className="h-4 w-4 text-green-600" />
                     <span className="text-muted-foreground text-sm">Total Return</span>
                   </div>
-                  <p className="text-lg font-bold text-green-600">+${userData.totalGain.toLocaleString()}</p>
-                  <p className="text-xs text-green-600">+{userData.totalGainPercent}%</p>
+                  <p className="text-lg font-bold text-green-600">+${totalGain.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-xs text-green-600">+{totalGainPercent.toFixed(2)}%</p>
                 </CardContent>
               </Card>
 
@@ -168,7 +175,7 @@ export default function Profile() {
                     <Award className="h-4 w-4 text-blue-600" />
                     <span className="text-muted-foreground text-sm">Win Rate = Percentage of trades closed with a profit</span>
                   </div>
-                  <p className="text-lg font-bold text-foreground">{userData.winRate}%</p>
+                  <p className="text-lg font-bold text-foreground">{winRate.toFixed(2)}%</p>
                 </CardContent>
               </Card>
 
@@ -178,7 +185,7 @@ export default function Profile() {
                     <TrendingUp className="h-4 w-4 text-purple-600" />
                     <span className="text-muted-foreground text-sm">Total Trades</span>
                   </div>
-                  <p className="text-lg font-bold text-foreground">{userData.totalTrades}</p>
+                  <p className="text-lg font-bold text-foreground">{Math.round(totalTrades)}</p>
                 </CardContent>
               </Card>
             </div>
@@ -190,8 +197,12 @@ export default function Profile() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {userData.recentTrades.map((trade) => (
-                    <div key={trade.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                  {userData.recentTrades.map((trade, index) => (
+                    <div
+                      key={trade.id}
+                      className="flex items-center justify-between p-3 bg-muted/30 rounded-lg animate-fade-in"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
                       <div className="flex items-center gap-3">
                         <Badge className={trade.type === "buy" ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
                             {trade.type === "buy" ? "Buy" : "Sell"}

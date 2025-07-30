@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, TrendingDown } from "lucide-react"
+import { TrendingUp, TrendingDown, Loader2 } from "lucide-react"
 import { Stock } from "@/types/stock"
 import { tradeStock } from "@/services/stocksService"
 import { useI18n } from "./i18n-provider"
@@ -205,7 +205,14 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
                 type === "buy" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
               }`}
             >
-              {loading ? "Processing..." : `Confirm ${type === "buy" ? "Buy" : "Sell"}`}
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t("trading.processing")}
+                </div>
+              ) : (
+                `${t("trading.confirm")} ${type === "buy" ? t("portfolio.buy") : t("portfolio.sell")}`
+              )}
             </Button>
 
 

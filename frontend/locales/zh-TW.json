@@ -53,6 +53,7 @@
     "estimatedTotal": "預估總價值",
     "cancel": "取消",
     "confirm": "確認",
+    "processing": "處理中...",
     "tradeFailed": "交易失敗，請重試。"
   },
   "stocks": {
@@ -76,6 +77,12 @@
     "searchPlaceholder": "搜索新聞...",
     "all": "全部",
     "loadMore": "加載更多新聞",
-    "relatedStocks": "相關股票"
+    "relatedStocks": "相關股票",
+    "summary": "摘要",
+    "readFullArticle": "閱讀全文",
+    "justNow": "剛剛",
+    "hoursAgo": "{{hours}}小時前",
+    "yesterday": "昨天",
+    "daysAgo": "{{days}}天前"
   }
 }

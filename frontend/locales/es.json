@@ -53,6 +53,7 @@
     "estimatedTotal": "Valor Total Estimado",
     "cancel": "Cancelar",
     "confirm": "Confirmar",
+    "processing": "Procesando...",
     "tradeFailed": "Operación fallida, por favor intente nuevamente."
   },
   "stocks": {
@@ -72,10 +73,16 @@
   },
   "market": {
     "title": "Perspectivas del Mercado",
-    "subtitle": "Manténgase actualizado con las últimas tendencias del mercado y noticias de inversión",
-    "searchPlaceholder": "Buscar Noticias...",
-    "all": "Todos",
-    "loadMore": "Cargar Más Noticias",
-    "relatedStocks": "Acciones Relacionadas"
+    "subtitle": "Mantente actualizado con las últimas tendencias del mercado y noticias de inversión",
+    "searchPlaceholder": "Buscar noticias...",
+    "all": "Todo",
+    "loadMore": "Cargar más noticias",
+    "relatedStocks": "Acciones relacionadas",
+    "summary": "Resumen",
+    "readFullArticle": "Leer artículo completo",
+    "justNow": "Ahora mismo",
+    "hoursAgo": "hace {{hours}}h",
+    "yesterday": "Ayer",
+    "daysAgo": "hace {{days}}d"
   }
 }

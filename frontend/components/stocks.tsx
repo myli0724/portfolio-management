@@ -74,17 +74,20 @@ export default function Stocks() {
   const [tradingModalOpen, setTradingModalOpen] = useState(false)
   const [tradingType, setTradingType] = useState<"buy" | "sell">("buy")
   const [watchlist, setWatchlist] = useState<number[]>([1, 3])
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<String>("");
 
   useEffect(() => {
+    setLoading(true);
     fetchStockById(selectedStockId)
       .then(data => {
         setSelectedStock(data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
-        setError(t("stocks.errorFetchData"))
+        setError(t("stocks.errorFetchData"));
+        setLoading(false);
       })
   }, [selectedStockId]);
 
@@ -194,7 +197,46 @@ export default function Stocks() {
             </div>
           ) : (
             <div className="xl:col-span-2">
-            {selectedStock && (
+            {loading ? (
+              <Card className="border">
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="h-6 w-24 bg-muted animate-pulse rounded"></div>
+                    </div>
+                    <div className="text-right">
+                      <div className="h-8 w-32 bg-muted animate-pulse rounded mb-2"></div>
+                      <div className="h-4 w-24 bg-muted animate-pulse rounded"></div>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardDescription>
+                  <div className="space-y-2 text-sm text-muted-foreground px-6 pb-2">
+                    <div className="grid grid-cols-3 gap-3">
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                      <div><div className="h-4 w-20 bg-muted animate-pulse rounded"></div></div>
+                    </div>
+                  </div>
+                </CardDescription>
+                <CardContent>
+                  <div className="h-64 bg-muted animate-pulse rounded"></div>
+                  <div className="flex gap-2 mt-4">
+                    <div className="h-10 bg-muted animate-pulse rounded flex-1"></div>
+                    <div className="h-10 bg-muted animate-pulse rounded flex-1"></div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : selectedStock ? (
               <Card className="border">
                 <CardHeader>
                   <div className="flex justify-between items-center">
@@ -274,11 +316,10 @@ export default function Stocks() {
                 </div>
                 </CardContent>
               </Card>
-            )}
+            ) : null}
           </div>
           )}
           
-
           {/* Stock List */}
           <div>
             <Card className="border">
@@ -286,7 +327,24 @@ export default function Stocks() {
                 <CardTitle className="text-foreground">{t("stocks.popularStocks")}</CardTitle>
               </CardHeader>
               <CardContent>
-                {selectedStock && (
+                {loading ? (
+                  <div className="space-y-3">
+                    {[...Array(3)].map((_, i) => (
+                      <div key={i} className="p-3 border rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="h-4 w-16 bg-muted animate-pulse rounded mb-1"></div>
+                            <div className="h-3 w-24 bg-muted animate-pulse rounded"></div>
+                          </div>
+                          <div className="text-right">
+                            <div className="h-4 w-20 bg-muted animate-pulse rounded mb-1"></div>
+                            <div className="h-3 w-16 bg-muted animate-pulse rounded"></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : selectedStock ? (
                   <StockList
                     stocks={mockStocks}
                     onSelectStock={setSelectedStock}
@@ -295,7 +353,7 @@ export default function Stocks() {
                     onToggleWatchlist={toggleWatchlist}
                     onTrade={handleTrade}
                   />
-                )}
+                ) : null}
               </CardContent>
             </Card>
           </div>
@@ -304,6 +362,8 @@ export default function Stocks() {
       
       {selectedStock && (
         <TradingModal
+          shares={0}
+          onTradeComplete={() => {}}
           isOpen={tradingModalOpen}
           onClose={() => setTradingModalOpen(false)}
           stockId={selectedStock.id}
