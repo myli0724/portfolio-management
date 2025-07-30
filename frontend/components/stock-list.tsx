@@ -56,14 +56,14 @@ export default function StockList({
             <div className="text-right">
               <p className="font-semibold text-foreground">${stock.recentClosePrice}</p>
               <div className="flex items-center gap-1">
-                {stock.recentClosePrice - stock.recentOpenPrice > 0 ? (
+                {stock.change > 0 ? (
                   <TrendingUp className="h-3 w-3 text-green-600" />
                 ) : (
                   <TrendingDown className="h-3 w-3 text-red-600" />
                 )}
-                <span className={`text-xs ${stock.recentClosePrice - stock.recentOpenPrice > 0 ? "text-green-600" : "text-red-600"}`}>
-                  {stock.recentClosePrice - stock.recentOpenPrice > 0 ? "+" : ""}
-                  {((stock.recentClosePrice - stock.recentOpenPrice) / stock.recentOpenPrice).toFixed(2)}%
+                <span className={`text-xs ${stock.change > 0 ? "text-green-600" : "text-red-600"}`}>
+                  {stock.change > 0 ? "+" : ""}
+                  {stock.changeRate.toFixed(2)}%
                 </span>
               </div>
             </div>
