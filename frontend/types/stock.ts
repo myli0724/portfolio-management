@@ -10,6 +10,8 @@ export type Stock = {
   volume: number
   high: number
   low: number
+  change: number
+  changeRate: number
   history: HistoryItem[]
 }
 
@@ -24,6 +26,8 @@ export function transformStockData(raw: any, tickerId: number): Stock {
     volume: raw.volume,
     high: raw.high,
     low: raw.low,
+    change: raw.change,
+    changeRate: raw.change_rate,
     history: raw.history
   }
 }
