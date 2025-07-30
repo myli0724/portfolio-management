@@ -10,6 +10,9 @@ import { HistoryItem } from "@/types/history"
 import { useEffect, useState } from "react"
 import { setDefaultResultOrder } from "dns"
 import { PortfolioApiResponse, PortfolioData } from "@/types/portfolio"
+import { Button } from "./ui/button"
+import Operation from "./operation"
+import TradingModal from "./trading-modal"
 
 // Mock portfolio data
 const mockPortfolioData = {
@@ -63,8 +66,11 @@ const mockPortfolioData = {
 
 export default function Portfolio() {
   const [portfolioDataList, setPortfolioDataList] = useState<PortfolioData[]>();
+  const [selectedStock, setSelectedStock] = useState<PortfolioData>();
   const [summary, setSummary] = useState<PortfolioApiResponse["summary"]>();
   const [error, setError] = useState<String>();
+  const [tradeAction, setTradeAction] = useState<"buy" | "sell">("buy");
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     fetchPortfolio()
@@ -80,7 +86,13 @@ export default function Portfolio() {
   }, []);
 
   if (error) return <div className="p-4 text-red-600">{error}</div>
-  if (!portfolioDataList) return <div className="p-4">Loading...</div>
+  // if (!portfolioDataList) return <div className="p-4">Loading...</div>
+
+  const handleTrade = (stock: any, type: "buy" | "sell") => {
+    setSelectedStock(stock);
+    setTradeAction(type);
+    setModalOpen(true);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -151,71 +163,113 @@ export default function Portfolio() {
             </CardContent>
           </Card>
         </div>
+        
+        {portfolioDataList ? (
+          <>
+            {/* Holdings */}
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-foreground">Holdings Breakdown</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {portfolioDataList.map((portfolioData) => (
+                    <div key={portfolioData.tickerId} className="bg-muted/30 rounded-lg p-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-[3fr_3fr_3fr_1fr] gap-4">
+                        {/* Stock Info */}
+                        <div className="flex items-center justify-between lg:justify-start gap-4">
+                          <div>
+                            <h3 className="font-semibold text-foreground">{portfolioData.ticker}</h3>
+                            {/* <p className="text-sm text-muted-foreground">{portfolioData.name}</p> */}
+                            <p className="text-xs text-muted-foreground">{portfolioData.shares} {portfolioData.shares > 1 ? "Shares" : "Share"}</p>
+                          </div>
+                          <Badge
+                            variant={portfolioData.profit > 0 ? "default" : "destructive"}
+                            className={portfolioData.profit > 0 ? "bg-green-600" : "bg-red-600"}
+                          >
+                            {portfolioData.profitRate}%
+                          </Badge>
+                        </div>
 
-        {/* Holdings */}
-        <Card className="border">
-          <CardHeader>
-            <CardTitle className="text-foreground">Holdings Breakdown</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {portfolioDataList.map((portfolioData) => (
-                <div key={portfolioData.tickerId} className="bg-muted/30 rounded-lg p-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    {/* Stock Info */}
-                    <div className="flex items-center justify-between lg:justify-start gap-4">
-                      <div>
-                        <h3 className="font-semibold text-foreground">{portfolioData.ticker}</h3>
-                        {/* <p className="text-sm text-muted-foreground">{portfolioData.name}</p> */}
-                        <p className="text-xs text-muted-foreground">{portfolioData.shares} {portfolioData.shares > 1 ? "Shares" : "Share"}</p>
-                      </div>
-                      <Badge
-                        variant={portfolioData.profit > 0 ? "default" : "destructive"}
-                        className={portfolioData.profit > 0 ? "bg-green-600" : "bg-red-600"}
-                      >
-                        {portfolioData.profitRate}%
-                      </Badge>
-                    </div>
+                        {/* Chart */}
+                        <div className="h-16">
+                          <StockChart historyData={portfolioData.history} color={portfolioData.profit > 0 ? "#22c55e" : "#ef4444"} />
+                        </div>
 
-                    {/* Chart */}
-                    <div className="h-16">
-                      <StockChart historyData={portfolioData.history} color={portfolioData.profit > 0 ? "#22c55e" : "#ef4444"} />
-                    </div>
+                        {/* Performance */}
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">Current Price</p>
+                            <p className="font-semibold text-foreground">${portfolioData.currentPrice.toFixed(2)}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Avg Purchase Price</p>
+                            <p className="font-semibold text-foreground">NULL</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Market Value</p>
+                            <p className="font-semibold text-foreground">${portfolioData.totalValue.toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Gain/Loss</p>
+                            <div className="flex items-center gap-1">
+                              {portfolioData.profit > 0 ? (
+                                <TrendingUp className="h-3 w-3 text-green-600" />
+                              ) : (
+                                <TrendingDown className="h-3 w-3 text-red-600" />
+                              )}
+                              <span className={`font-semibold ${portfolioData.profit > 0 ? "text-green-600" : "text-red-600"}`}>
+                                ${Math.abs(portfolioData.profit).toLocaleString()} ({Math.abs(portfolioData.profitRate)}%)
+                              </span>
+                            </div>
+                          </div>
+                        </div>
 
-                    {/* Performance */}
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <p className="text-muted-foreground">Current Price</p>
-                        <p className="font-semibold text-foreground">${portfolioData.currentPrice.toFixed(2)}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Avg Purchase Price</p>
-                        <p className="font-semibold text-foreground">NULL</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Market Value</p>
-                        <p className="font-semibold text-foreground">${portfolioData.totalValue.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Gain/Loss</p>
-                        <div className="flex items-center gap-1">
-                          {portfolioData.profit > 0 ? (
-                            <TrendingUp className="h-3 w-3 text-green-600" />
-                          ) : (
-                            <TrendingDown className="h-3 w-3 text-red-600" />
-                          )}
-                          <span className={`font-semibold ${portfolioData.profit > 0 ? "text-green-600" : "text-red-600"}`}>
-                            ${Math.abs(portfolioData.profit).toLocaleString()} ({Math.abs(portfolioData.profitRate)}%)
-                          </span>
+                        {/* Operations */}
+                        {/* <Operation onTrade={handleTrade} direction="row"></Operation> */}
+                        <div className="flex items-center justify-center flex-col gap-1">
+                            <Button
+                              onClick={() => handleTrade(portfolioData, "buy")}
+                              className="h-7 min-w-[64px] px-2 text-xs bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              Buy
+                            </Button>
+                            <Button
+                              onClick={() => handleTrade(portfolioData, "sell")}
+                              variant="outline"
+                              className="h-7 min-w-[64px] px-2 text-xs border-red-600 text-red-600 hover:bg-red-600/10"
+                            >
+                              Sell
+                            </Button>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </>
+        ) : (
+          <>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="border p-6">
+                <div className="h-16 bg-muted animate-pulse rounded-md" />
+              </Card>
+            ))}
+          </>
+        )}
+        {selectedStock && (
+          <TradingModal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            stockId={selectedStock.tickerId}
+            stockName={selectedStock.ticker} 
+            stockPrice={selectedStock.currentPrice} 
+            stockChange={selectedStock.profit} 
+            stockChangeRate={selectedStock.profitRate} 
+            type={tradeAction} >
+          </TradingModal> 
+        )}
       </div>
     </div>
   )

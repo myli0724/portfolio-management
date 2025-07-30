@@ -4,13 +4,14 @@ import { SetStateAction, useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, TrendingUp, TrendingDown, Star } from "lucide-react"
+import { Search, TrendingUp, TrendingDown, Star, Loader2 } from "lucide-react"
 import Navigation from "@/components/navigation"
 import StockChart from "@/components/stock-chart"
 import StockList from "@/components/stock-list"
 import TradingModal from "@/components/trading-modal"
-import { fetchStockById, fetchStockByKeyWord } from "@/services/stocksService"
+import { fetchStockById, fetchStockByKeyWord, tradeStock } from "@/services/stocksService"
 import { Stock } from "@/types/stock"
+import Operation from "./operation"
 
 // Mock data
 const mockStocks = [
@@ -24,6 +25,8 @@ const mockStocks = [
     volume: 45.2,
     high: 215.4,
     low: 213.24,
+    change: -1.26,
+    changeRate: -0.41,
     history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
   },
   {
@@ -36,6 +39,8 @@ const mockStocks = [
     volume: 45.2,
     high: 215.4,
     low: 213.24,
+    change: -1.26,
+    changeRate: -0.41,
     history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
   },
   {
@@ -48,6 +53,8 @@ const mockStocks = [
     volume: 45.2,
     high: 215.4,
     low: 213.24,
+    change: -1.26,
+    changeRate: -0.41,
     history: [{"date":"2024-07-29","close":215.95},{"date":"2024-07-30","close":218.17},{"date":"2024-07-31","close":220.41},{"date":"2024-08-01","close":223.33},{"date":"2024-08-02","close":218.13},{"date":"2024-08-05","close":198.16},{"date":"2024-08-06","close":204.34},{"date":"2024-08-07","close":205.94},{"date":"2024-08-08","close":212.12},{"date":"2024-08-09","close":211.11},{"date":"2024-08-12","close":215.31},{"date":"2024-08-13","close":218.24},{"date":"2024-08-14","close":219.8},{"date":"2024-08-15","close":223.81}]
   }
 ]
@@ -65,13 +72,13 @@ export default function Stocks() {
   const [tradingModalOpen, setTradingModalOpen] = useState(false)
   const [tradingType, setTradingType] = useState<"buy" | "sell">("buy")
   const [watchlist, setWatchlist] = useState<number[]>([1, 3])
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<String>();
 
   useEffect(() => {
     fetchStockById(selectedStockId)
       .then(data => {
         setSelectedStock(data);
-        console.log(selectedStock);
       })
       .catch((err) => {
         console.log(err);
@@ -80,18 +87,30 @@ export default function Stocks() {
   }, [selectedStockId]);
 
   const handleTrade = (stock: any, type: "buy" | "sell") => {
-    setSelectedStock(stock)
-    setTradingType(type)
-    setTradingModalOpen(true)
+    setSelectedStock(stock);
+    setTradingType(type);
+    setTradingModalOpen(true);
   }
 
   const toggleWatchlist = (stockId: number) => {
     setWatchlist((prev) => (prev.includes(stockId) ? prev.filter((id) => id !== stockId) : [...prev, stockId]))
   }
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    fetchStockByKeyWord(e.target.value)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      submitSearch();
+    }
+  }
+
+  const submitSearch = () => {
+    if (!searchQuery.trim()) return;
+    setLoading(true);
+
+    fetchStockByKeyWord(searchQuery)
       .then(data => {
         setSelectedStock(data);
         console.log(selectedStock);
@@ -100,7 +119,12 @@ export default function Stocks() {
         console.log(err);
         setError("Can't get portfolio data from the server...")
       })
+      .finally(() => {
+        setLoading(false);
+      })
   }
+
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -147,8 +171,16 @@ export default function Stocks() {
               placeholder="Search for Index or Company Name..." 
               value={searchQuery}
               onChange={handleSearch}
-              className="pl-10"
+              onKeyDown={handleKeyDown}
+              className="pl-10 pr-28"
             />
+            <Button onClick={submitSearch} className="absolute right-1 top-1/2 -translate-y-1/2 bg-red-600 hover:bg-red-700 text-white h-8 px-3 text-sm">
+              {loading ? (
+                <Loader2 className="animate-spin h-4 w-4" />
+              ) : (
+                "Search"
+              )}
+            </Button>
           </div>
         </div>
 
@@ -167,13 +199,13 @@ export default function Stocks() {
                     <div className="text-right">
                       <p className="text-2xl font-bold text-foreground">${selectedStock?.recentClosePrice}</p>
                       <div className="flex items-center gap-1">
-                        {selectedStock?.recentClosePrice - selectedStock.recentOpenPrice > 0 ? (
+                        {selectedStock?.change > 0 ? (
                           <TrendingUp className="h-4 w-4 text-green-600" />
                         ) : (
                           <TrendingDown className="h-4 w-4 text-red-600" />
                         )}
-                        <span className={selectedStock?.recentClosePrice - selectedStock.recentOpenPrice > 0 ? "text-green-600" : "text-red-600"}>
-                          ${Math.abs(selectedStock?.recentClosePrice - selectedStock.recentOpenPrice).toFixed(2)} ({(Math.abs(selectedStock?.recentClosePrice - selectedStock.recentOpenPrice) / selectedStock.recentOpenPrice).toFixed(2)}%)
+                        <span className={selectedStock?.change > 0 ? "text-green-600" : "text-red-600"}>
+                          ${Math.abs(selectedStock?.change).toFixed(2)} ({selectedStock.changeRate}%)
                         </span>
                       </div>
                     </div>
@@ -215,29 +247,22 @@ export default function Stocks() {
                   <div className="h-64">
                     <StockChart historyData={selectedStock?.history} />
                   </div>
-                  <div className="flex gap-2 mt-4">
+                  {/* <Operation onTrade={handleTrade} direction="row"></Operation> */}
+                  <div className={`flex gap-2 mt-4 "flex-row"`}>
                     <Button
-                      onClick={() => handleTrade(selectedStock, "buy")}
-                      className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1 text-white"
+                        onClick={() => handleTrade(selectedStock, "buy")}
+                        className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex-1 text-white"
                     >
-                      Buy
+                        Buy
                     </Button>
                     <Button
-                      onClick={() => handleTrade(selectedStock, "sell")}
-                      variant="outline"
-                      className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1"
+                        onClick={() => handleTrade(selectedStock, "sell")}
+                        variant="outline"
+                        className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1"
                     >
-                      Sell
+                        Sell
                     </Button>
-                    {/* <Button
-                      onClick={() => toggleWatchlist(selectedStockId)}
-                      variant="outline"
-                      size="icon"
-                      className={`${watchlist.includes(selectedStockId) ? "text-yellow-500 bg-yellow-500/10" : ""}`}
-                    >
-                      <Star className="h-4 w-4" />
-                    </Button> */}
-                  </div>
+                </div>
                 </CardContent>
               </Card>
             )}
@@ -265,13 +290,18 @@ export default function Stocks() {
           </div>
         </div>
       </div>
-
-      {/* <TradingModal
-        isOpen={tradingModalOpen}
-        onClose={() => setTradingModalOpen(false)}
-        stock={selectedStock}
-        type={tradingType}
-      /> */}
+      
+      {selectedStock && (
+        <TradingModal
+          isOpen={tradingModalOpen}
+          onClose={() => setTradingModalOpen(false)}
+          stockId={selectedStock.id}
+          stockName={selectedStock.tickerName} 
+          stockPrice={selectedStock.recentClosePrice} 
+          stockChange={selectedStock.change} 
+          stockChangeRate={selectedStock.changeRate} 
+          type={tradingType} />
+      )}
     </div>
   )
 }
