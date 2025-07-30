@@ -53,6 +53,7 @@
     "estimatedTotal": "Valor Total Estimado",
     "cancel": "Cancelar",
     "confirm": "Confirmar",
+    "processing": "Procesando...",
     "tradeFailed": "Operación fallida, por favor intente nuevamente."
   },
   "stocks": {

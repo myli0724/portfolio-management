@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart, LineChart, Banknote } from "lucide-react"
 import Navigation from "@/components/navigation"
-import StockChart from "@/components/stock-chart"
+import StockChart from "@/components/old-stock-chart"
 import { fetchPortfolio } from "@/services/portfolioService";
 import { HistoryItem } from "@/types/history"
 import { useEffect, useState } from "react"

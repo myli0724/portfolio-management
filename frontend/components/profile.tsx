@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Mail, Phone, Calendar, TrendingUp, DollarSign, Award, Settings, Bell } from "lucide-react"
 import Navigation from "@/components/navigation"
-import useAnimatedCounter from "@/hooks/use-animated-counter.tsx"
+import useAnimatedCounter from "@/hooks/use-animated-counter"
 
 // Mock user data
 const userData = {

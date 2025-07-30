@@ -53,6 +53,7 @@
     "estimatedTotal": "预估总价值",
     "cancel": "取消",
     "confirm": "确认",
+    "processing": "处理中...",
     "tradeFailed": "交易失败，请重试。"
   },
   "stocks": {

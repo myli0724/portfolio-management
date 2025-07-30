@@ -53,6 +53,7 @@
     "estimatedTotal": "預估總價值",
     "cancel": "取消",
     "confirm": "確認",
+    "processing": "處理中...",
     "tradeFailed": "交易失敗，請重試。"
   },
   "stocks": {
