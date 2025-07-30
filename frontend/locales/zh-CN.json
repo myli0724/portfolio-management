@@ -1,0 +1,81 @@
+{
+  "common": {
+    "appName": "智投宝",
+    "theme": {
+      "light": "浅色",
+      "dark": "深色"
+    },
+    "language": {
+      "en": "英文",
+      "zh-CN": "简体中文",
+      "zh-TW": "繁体中文",
+      "es": "西班牙语"
+    }
+  },
+  "navigation": {
+    "portfolio": "投资组合",
+    "stocks": "股票",
+    "watchlist": "关注列表",
+    "market": "市场",
+    "profile": "个人资料",
+    "settings": "设置"
+  },
+  "portfolio": {
+    "title": "投资组合",
+    "subtitle": "投资表现概览",
+    "totalAssets": "总资产",
+    "assets": "资产",
+    "availableFunds": "可用资金",
+    "totalGainLoss": "总收益/亏损",
+    "dailyChange": "日变化",
+    "numberOfHoldings": "持仓数量",
+    "stocks": "支股票",
+    "holdingsBreakdown": "持仓明细",
+    "currentPrice": "当前价格",
+    "avgPurchasePrice": "平均购买价格",
+    "marketValue": "市值",
+    "gainLoss": "收益/亏损",
+    "shares": "股",
+    "share": "股",
+    "buy": "买入",
+    "sell": "卖出",
+    "loading": "加载中...",
+    "error": "无法从服务器获取投资组合数据..."
+  },
+  "trading": {
+    "orderType": "订单类型",
+    "marketOrder": "市价订单",
+    "limitOrder": "限价订单",
+    "limitPrice": "限价",
+    "quantity": "数量",
+    "enterLimitPrice": "输入限价",
+    "enterShares": "输入股票数量",
+    "estimatedTotal": "预估总价值",
+    "cancel": "取消",
+    "confirm": "确认",
+    "tradeFailed": "交易失败，请重试。"
+  },
+  "stocks": {
+    "title": "股票看板",
+    "subtitle": "实时市场数据与投资机会",
+    "searchPlaceholder": "搜索指数或公司名称...",
+    "search": "搜索",
+    "popularStocks": "热门股票",
+    "openingPrice": "开盘价",
+    "closingPrice": "收盘价",
+    "date": "日期",
+    "highest": "最高价",
+    "lowest": "最低价",
+    "volume": "成交量",
+    "marketCap": "市值",
+    "noStock": "未找到匹配的股票。"
+  },
+  "market": {
+    "title": "市场洞察",
+    "subtitle": "了解最新市场趋势和投资新闻",
+    "searchPlaceholder": "搜索新闻...",
+    "all": "全部",
+    "loadMore": "加载更多新闻",
+    "relatedStocks": "相关股票"
+  }
+}

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Stock } from "@/types/stock"
 import { Star, TrendingUp, TrendingDown } from "lucide-react"
+import { useI18n } from "./i18n-provider"
 
 interface StockListProps {
   stocks: Stock[]
@@ -21,6 +22,7 @@ export default function StockList({
   onToggleWatchlist,
   onTrade,
 }: StockListProps) {
+  const { t } = useI18n();
   return (
     <div className="space-y-3">
       {stocks.map((stock) => (
@@ -95,8 +97,8 @@ export default function StockList({
           </div>
 
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Volume: {stock.volume}</span>
-            <span>Market Cap: {stock.marketValue}</span>
+            <span>{t("stocks.volume")}: {stock.volume}</span>
+            <span>{t("stocks.marketCap")}: {stock.marketValue}</span>
           </div>
 
           <div className="flex gap-2 mt-3">
@@ -108,7 +110,7 @@ export default function StockList({
                 onTrade(stock, "buy")
               }}
             >
-              Buy
+              {t("portfolio.buy")}
             </Button>
             <Button
               size="sm"
@@ -119,7 +121,7 @@ export default function StockList({
                 onTrade(stock, "sell")
               }}
             >
-              Sell
+              {t("portfolio.sell")}
             </Button>
           </div>
         </div>

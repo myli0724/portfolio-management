@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Search, Clock, TrendingUp, ExternalLink, Filter } from "lucide-react"
 import Navigation from "@/components/navigation"
 import { newsService, NewsItem } from "@/services/newsService"
+import { useI18n } from "./i18n-provider"
 
 // Mock news data
 const mockNews = [ // This will be replaced by API data
@@ -94,6 +95,7 @@ const categories = ["All",
   "Product Launch",];
 
 export default function Market() {
+  const { t } = useI18n();
   const [news, setNews] = useState<NewsItem[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
@@ -146,8 +148,8 @@ export default function Market() {
       <div className="lg:ml-64 p-4 lg:p-8 mobile-content lg:desktop-content">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Market Insights</h1>
-          <p className="text-muted-foreground">Stay updated with the latest market trends and investment news</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t("market.title")}</h1>
+          <p className="text-muted-foreground">{t("market.subtitle")}</p>
         </div>
 
         {/* Search and Filter */}
@@ -155,7 +157,7 @@ export default function Market() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="Search News..."
+              placeholder={t("market.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -224,7 +226,7 @@ export default function Market() {
                     {/* Related Stocks */}
                     {news.ticker_sentiment && news.ticker_sentiment.length > 0 && (
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">Related Stocks:</span>
+                        <span className="text-xs text-muted-foreground">{t("market.relatedStocks")}:</span>
                         <div className="flex gap-1">
                           {news.ticker_sentiment.map((stock: { ticker: string }) => (
                             <Badge
@@ -248,7 +250,7 @@ export default function Market() {
         {/* Load More */}
         <div className="text-center mt-8">
           <Button variant="outline" className="px-8 bg-transparent">
-            Load More News
+            {t("market.loadMore")}
           </Button>
         </div>
       </div>

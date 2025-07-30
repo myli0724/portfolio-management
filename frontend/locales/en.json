@@ -1,0 +1,81 @@
+{
+  "common": {
+    "appName": "InvestPro",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language": {
+      "en": "English",
+      "zh-CN": "Simplified Chinese",
+      "zh-TW": "Traditional Chinese",
+      "es": "Spanish"
+    }
+  },
+  "navigation": {
+    "portfolio": "Portfolio",
+    "stocks": "Stocks",
+    "watchlist": "Watchlist",
+    "market": "Market",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "subtitle": "Investment Performance Overview",
+    "totalAssets": "Total Assets",
+    "assets": "Assets",
+    "availableFunds": "Available Funds",
+    "totalGainLoss": "Total Gain/Loss",
+    "dailyChange": "Daily Change",
+    "numberOfHoldings": "Number of Holdings",
+    "stocks": "stocks",
+    "holdingsBreakdown": "Holdings Breakdown",
+    "currentPrice": "Current Price",
+    "avgPurchasePrice": "Avg Purchase Price",
+    "marketValue": "Market Value",
+    "gainLoss": "Gain/Loss",
+    "shares": "Shares",
+    "share": "Share",
+    "buy": "Buy",
+    "sell": "Sell",
+    "loading": "Loading...",
+    "error": "Can't get portfolio data from the server..."
+  },
+  "trading": {
+    "orderType": "Order Type",
+    "marketOrder": "Market Order",
+    "limitOrder": "Limit Order",
+    "limitPrice": "Limit Price",
+    "quantity": "Quantity",
+    "enterLimitPrice": "Enter Limit Price",
+    "enterShares": "Enter Number of Shares",
+    "estimatedTotal": "Estimated Total Value",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "tradeFailed": "Trade failed, please try again."
+  },
+  "stocks": {
+    "title": "Stocks Dashboard",
+    "subtitle": "Real-time Market Data & Investment Opportunities",
+    "searchPlaceholder": "Search for Index or Company Name...",
+    "search": "Search",
+    "popularStocks": "Popular Stocks",
+    "openingPrice": "Opening Price",
+    "closingPrice": "Closing Price",
+    "date": "Date",
+    "highest": "Highest",
+    "lowest": "Lowest",
+    "volume": "Volume",
+    "marketCap": "Market Cap",
+    "noStock": "No matching stock found."
+  },
+  "market": {
+    "title": "Market Insights",
+    "subtitle": "Stay updated with the latest market trends and investment news",
+    "searchPlaceholder": "Search News...",
+    "all": "All",
+    "loadMore": "Load More News",
+    "relatedStocks": "Related Stocks"
+  }
+}

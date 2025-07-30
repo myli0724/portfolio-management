@@ -7,20 +7,24 @@ import { Home, TrendingUp, Wallet, Star, Settings, User, Menu, X, Sun, Moon, Inf
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTheme } from "@/components/theme-provider"
+import { useI18n } from "@/components/i18n-provider"
+import LanguageSwitcher from "@/components/language-switcher"
 
-const navItems = [
-  { href: "/portfolio", icon: Wallet, label: "Portfolio", badge: null },
-  { href: "/stocks", icon: Info, label: "Stocks", badge: null },
-  { href: "/watchlist", icon: Star, label: "Watchlist", badge: "12" },
-  { href: "/market", icon: TrendingUp, label: "Market", badge: null },
-  { href: "/profile", icon: User, label: "Profile", badge: null },
-  { href: "/settings", icon: Settings, label: "Settings", badge: null },
+const getNavItems = (t: (key: string) => string) => [
+  { href: "/portfolio", icon: Wallet, label: t("navigation.portfolio"), badge: null },
+  { href: "/stocks", icon: Info, label: t("navigation.stocks"), badge: null },
+  { href: "/watchlist", icon: Star, label: t("navigation.watchlist"), badge: "12" },
+  { href: "/market", icon: TrendingUp, label: t("navigation.market"), badge: null },
+  { href: "/profile", icon: User, label: t("navigation.profile"), badge: null },
+  { href: "/settings", icon: Settings, label: t("navigation.settings"), badge: null },
 ]
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
+  const { t } = useI18n()
+  const navItems = getNavItems(t)
 
   return (
     <>
@@ -34,14 +38,17 @@ export default function Navigation() {
               </div>
               <span className="text-xl font-bold text-foreground">InvestPro</span>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="h-8 w-8"
-            >
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-            </Button>
+            <div className="flex items-center gap-1">
+              <LanguageSwitcher />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="h-8 w-8"
+              >
+                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              </Button>
+            </div>
           </div>
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -84,17 +91,20 @@ export default function Navigation() {
             <span className="text-xl font-bold text-foreground">InvestPro</span>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="h-8 w-8"
-            >
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-            </Button>
-            <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
+            <div className="flex items-center gap-1">
+              <LanguageSwitcher />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="h-8 w-8"
+              >
+                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
           </div>
         </div>
 
