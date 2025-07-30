@@ -80,7 +80,7 @@ export default function Portfolio() {
   }, []);
 
   if (error) return <div className="p-4 text-red-600">{error}</div>
-  if (!portfolioDataList) return <div className="p-4">Loading...</div>
+  // if (!portfolioDataList) return <div className="p-4">Loading...</div>
 
   return (
     <div className="min-h-screen bg-background">
@@ -151,71 +151,84 @@ export default function Portfolio() {
             </CardContent>
           </Card>
         </div>
+        
+        {portfolioDataList ? (
+          <>
+            {/* Holdings */}
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-foreground">Holdings Breakdown</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {portfolioDataList.map((portfolioData) => (
+                    <div key={portfolioData.tickerId} className="bg-muted/30 rounded-lg p-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                        {/* Stock Info */}
+                        <div className="flex items-center justify-between lg:justify-start gap-4">
+                          <div>
+                            <h3 className="font-semibold text-foreground">{portfolioData.ticker}</h3>
+                            {/* <p className="text-sm text-muted-foreground">{portfolioData.name}</p> */}
+                            <p className="text-xs text-muted-foreground">{portfolioData.shares} {portfolioData.shares > 1 ? "Shares" : "Share"}</p>
+                          </div>
+                          <Badge
+                            variant={portfolioData.profit > 0 ? "default" : "destructive"}
+                            className={portfolioData.profit > 0 ? "bg-green-600" : "bg-red-600"}
+                          >
+                            {portfolioData.profitRate}%
+                          </Badge>
+                        </div>
 
-        {/* Holdings */}
-        <Card className="border">
-          <CardHeader>
-            <CardTitle className="text-foreground">Holdings Breakdown</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {portfolioDataList.map((portfolioData) => (
-                <div key={portfolioData.tickerId} className="bg-muted/30 rounded-lg p-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    {/* Stock Info */}
-                    <div className="flex items-center justify-between lg:justify-start gap-4">
-                      <div>
-                        <h3 className="font-semibold text-foreground">{portfolioData.ticker}</h3>
-                        {/* <p className="text-sm text-muted-foreground">{portfolioData.name}</p> */}
-                        <p className="text-xs text-muted-foreground">{portfolioData.shares} {portfolioData.shares > 1 ? "Shares" : "Share"}</p>
-                      </div>
-                      <Badge
-                        variant={portfolioData.profit > 0 ? "default" : "destructive"}
-                        className={portfolioData.profit > 0 ? "bg-green-600" : "bg-red-600"}
-                      >
-                        {portfolioData.profitRate}%
-                      </Badge>
-                    </div>
+                        {/* Chart */}
+                        <div className="h-16">
+                          <StockChart historyData={portfolioData.history} color={portfolioData.profit > 0 ? "#22c55e" : "#ef4444"} />
+                        </div>
 
-                    {/* Chart */}
-                    <div className="h-16">
-                      <StockChart historyData={portfolioData.history} color={portfolioData.profit > 0 ? "#22c55e" : "#ef4444"} />
-                    </div>
-
-                    {/* Performance */}
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <p className="text-muted-foreground">Current Price</p>
-                        <p className="font-semibold text-foreground">${portfolioData.currentPrice.toFixed(2)}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Avg Purchase Price</p>
-                        <p className="font-semibold text-foreground">NULL</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Market Value</p>
-                        <p className="font-semibold text-foreground">${portfolioData.totalValue.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Gain/Loss</p>
-                        <div className="flex items-center gap-1">
-                          {portfolioData.profit > 0 ? (
-                            <TrendingUp className="h-3 w-3 text-green-600" />
-                          ) : (
-                            <TrendingDown className="h-3 w-3 text-red-600" />
-                          )}
-                          <span className={`font-semibold ${portfolioData.profit > 0 ? "text-green-600" : "text-red-600"}`}>
-                            ${Math.abs(portfolioData.profit).toLocaleString()} ({Math.abs(portfolioData.profitRate)}%)
-                          </span>
+                        {/* Performance */}
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">Current Price</p>
+                            <p className="font-semibold text-foreground">${portfolioData.currentPrice.toFixed(2)}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Avg Purchase Price</p>
+                            <p className="font-semibold text-foreground">NULL</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Market Value</p>
+                            <p className="font-semibold text-foreground">${portfolioData.totalValue.toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Gain/Loss</p>
+                            <div className="flex items-center gap-1">
+                              {portfolioData.profit > 0 ? (
+                                <TrendingUp className="h-3 w-3 text-green-600" />
+                              ) : (
+                                <TrendingDown className="h-3 w-3 text-red-600" />
+                              )}
+                              <span className={`font-semibold ${portfolioData.profit > 0 ? "text-green-600" : "text-red-600"}`}>
+                                ${Math.abs(portfolioData.profit).toLocaleString()} ({Math.abs(portfolioData.profitRate)}%)
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </>
+        ) : (
+          <>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="border p-6">
+                <div className="h-16 bg-muted animate-pulse rounded-md" />
+              </Card>
+            ))}
+          </>
+        )}
+        
       </div>
     </div>
   )

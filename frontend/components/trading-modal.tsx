@@ -7,15 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown } from "lucide-react"
-
-interface Stock {
-  id: string
-  symbol: string
-  name: string
-  price: number
-  change: number
-  changePercent: number
-}
+import { Stock } from "@/types/stock"
+import { tradeStock } from "@/services/stocksService"
 
 interface TradingModalProps {
   isOpen: boolean
@@ -25,18 +18,24 @@ interface TradingModalProps {
 }
 
 export default function TradingModal({ isOpen, onClose, stock, type }: TradingModalProps) {
-  const [quantity, setQuantity] = useState("")
+  const [quantity, setQuantity] = useState<number>(0)
   const [orderType, setOrderType] = useState<"market" | "limit">("market")
   const [limitPrice, setLimitPrice] = useState("")
+  const [error, setError] = useState("");
 
-  const totalValue = Number.parseFloat(quantity) * stock.price || 0
+  const totalValue = quantity * stock.recentClosePrice || 0
 
-  const handleSubmit = () => {
-    // Here you would handle the actual trading logic
-    console.log("Trading:", { stock, type, quantity, orderType, limitPrice })
-    onClose()
-    setQuantity("")
-    setLimitPrice("")
+  const handleSubmit = async () => {
+    try {
+      await tradeStock(stock.id, type, quantity, stock.recentClosePrice)
+      // setSuccess(true)
+      setTimeout(() => {
+        // setSuccess(false)
+        onClose()
+      }, 1500)
+    } catch (err: any) {
+      setError("Trade failed, please try again.")
+    } 
   }
 
   return (
@@ -44,7 +43,7 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {type === "buy" ? "Buy" : "Sell"} {stock.symbol}
+            {type === "buy" ? "Buy" : "Sell"} {stock.tickerName}
             <Badge variant={type === "buy" ? "default" : "destructive"} className="ml-2">
               {type === "buy" ? "Buy" : "Sell"}
             </Badge>
@@ -56,11 +55,11 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
           <div className="bg-muted/50 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <div>
-                <h3 className="font-semibold text-foreground">{stock.symbol}</h3>
-                <p className="text-sm text-muted-foreground">{stock.name}</p>
+                <h3 className="font-semibold text-foreground">{stock.tickerName}</h3>
+                {/* <p className="text-sm text-muted-foreground">{stock.name}</p> */}
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold text-foreground">${stock.price}</p>
+                <p className="text-xl font-bold text-foreground">${stock.recentClosePrice}</p>
                 <div className="flex items-center gap-1">
                   {stock.change > 0 ? (
                     <TrendingUp className="h-4 w-4 text-green-600" />
@@ -68,8 +67,8 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
                     <TrendingDown className="h-4 w-4 text-red-600" />
                   )}
                   <span className={stock.change > 0 ? "text-green-600" : "text-red-600"}>
-                    {stock.changePercent > 0 ? "+" : ""}
-                    {stock.changePercent}%
+                    {stock.changeRate > 0 ? "+" : ""}
+                    {stock.changeRate}%
                   </span>
                 </div>
               </div>
@@ -123,7 +122,7 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
               id="quantity"
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={(e) => setQuantity(Number(e.target.value))}
               placeholder="Enter Number of Shares"
             />
           </div>
@@ -146,9 +145,9 @@ export default function TradingModal({ isOpen, onClose, stock, type }: TradingMo
             <Button
               onClick={handleSubmit}
               disabled={!quantity}
-              className={`flex-1 ${type === "buy" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
+              className={`flex-1 text-white ${type === "buy" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
             >
-              Confirm{type === "buy" ? "Buy" : "Sell"}
+              Confirm{type === "buy" ? " Buy" : " Sell"}
             </Button>
           </div>
         </div>

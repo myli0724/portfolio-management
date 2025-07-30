@@ -25,3 +25,26 @@ export async function fetchStockByKeyWord(tickerName: string): Promise<Stock> {
     const json = await res.json();
     return transformStockData(json.data, json.data.id);
 }
+
+export async function tradeStock(stockId: number, type: "buy" | "sell", quantity: number, price: number) {
+  const endpoint = `/api/stocks/${stockId}/${type}`
+
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      quantity,
+      price,
+    }),
+  })
+
+  if (!res.ok) {
+    const errMsg = await res.text()
+    throw new Error(`Trade failed: ${errMsg}`)
+  }
+
+  return res.json()
+}
+
