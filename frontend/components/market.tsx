@@ -1,15 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Clock, TrendingUp, ExternalLink, Filter } from "lucide-react"
 import Navigation from "@/components/navigation"
+import { newsService, NewsItem } from "@/services/newsService"
 
 // Mock news data
-const mockNews = [
+const mockNews = [ // This will be replaced by API data
   {
     id: "1",
     title: "Apple Reports Quarterly Earnings, Revenue Beats Expectations",
@@ -93,38 +94,50 @@ const categories = ["All",
   "Product Launch",];
 
 export default function Market() {
+  const [news, setNews] = useState<NewsItem[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
 
-  const filteredNews = mockNews.filter((news) => {
+  useEffect(() => {
+    const loadNews = async () => {
+      try {
+        const data = await newsService.getNews();
+        setNews(data);
+      } catch (error) {
+        console.error('Failed to fetch news:', error);
+      }
+    };
+
+    loadNews();
+  }, []);
+
+  const filteredNews = news.filter((news: NewsItem) => {
     const matchesSearch =
       news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       news.summary.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || news.category === selectedCategory
+    const matchesCategory = selectedCategory === "All" || news.overall_sentiment_label === selectedCategory
     return matchesSearch && matchesCategory
   })
 
-  const getImpactColor = (impact: string) => {
-    switch (impact) {
-      case "positive":
-        return "text-green-600 bg-green-100 dark:bg-green-900/20"
-      case "negative":
-        return "text-red-600 bg-red-100 dark:bg-red-900/20"
-      default:
-        return "text-blue-600 bg-blue-100 dark:bg-blue-900/20"
+    const getImpactColor = (sentimentLabel: string) => {
+    if (sentimentLabel.includes("Bullish")) {
+      return "text-green-600 bg-green-100 dark:bg-green-900/20";
     }
-  }
+    if (sentimentLabel.includes("Bearish")) {
+      return "text-red-600 bg-red-100 dark:bg-red-900/20";
+    }
+    return "text-blue-600 bg-blue-100 dark:bg-blue-900/20";
+  };
 
-  const getImpactIcon = (impact: string) => {
-    switch (impact) {
-      case "positive":
-        return <TrendingUp className="h-3 w-3" />
-      case "negative":
-        return <TrendingUp className="h-3 w-3 rotate-180" />
-      default:
-        return <Clock className="h-3 w-3" />
+    const getImpactIcon = (sentimentLabel: string) => {
+    if (sentimentLabel.includes("Bullish")) {
+      return <TrendingUp className="h-3 w-3" />;
     }
-  }
+    if (sentimentLabel.includes("Bearish")) {
+      return <TrendingUp className="h-3 w-3 rotate-180" />;
+    }
+    return <Clock className="h-3 w-3" />;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -168,14 +181,14 @@ export default function Market() {
 
         {/* News List */}
         <div className="space-y-6">
-          {filteredNews.map((news) => (
+          {filteredNews.map((news: NewsItem) => (
             <Card key={news.id} className="border hover:shadow-lg transition-all duration-300">
               <CardContent className="p-0">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {/* Image */}
                   <div className="md:col-span-1">
                     <img
-                      src={news.image || "/placeholder.svg"}
+                      src={news.banner_image || "/placeholder.svg"}
                       alt={news.title}
                       className="w-full h-48 md:h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
                     />
@@ -188,18 +201,20 @@ export default function Market() {
                         <Badge variant="secondary" className="text-xs">
                           {news.source}
                         </Badge>
-                        <Badge className={`text-xs ${getImpactColor(news.impact)}`}>
-                          {getImpactIcon(news.impact)}
-                          <span className="ml-1">{news.category}</span>
+                        <Badge className={`text-xs ${getImpactColor(news.overall_sentiment_label)}`}>
+                          {getImpactIcon(news.overall_sentiment_label)}
+                          <span className="ml-1">{news.overall_sentiment_label}</span>
                         </Badge>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="h-3 w-3" />
-                          {news.time}
+                          {new Date(news.time_published).toLocaleString()}
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
+                      <a href={news.url} target="_blank" rel="noopener noreferrer">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </a>
                     </div>
 
                     <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2">{news.title}</h3>
@@ -207,17 +222,17 @@ export default function Market() {
                     <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{news.summary}</p>
 
                     {/* Related Stocks */}
-                    {news.relatedStocks.length > 0 && (
+                    {news.ticker_sentiment && news.ticker_sentiment.length > 0 && (
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground">Related Stocks:</span>
                         <div className="flex gap-1">
-                          {news.relatedStocks.map((stock) => (
+                          {news.ticker_sentiment.map((stock: { ticker: string }) => (
                             <Badge
-                              key={stock}
+                              key={stock.ticker}
                               variant="outline"
                               className="text-xs cursor-pointer hover:bg-red-600/10 hover:border-red-600 hover:text-red-600"
                             >
-                              {stock}
+                              {stock.ticker}
                             </Badge>
                           ))}
                         </div>

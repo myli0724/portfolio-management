@@ -1,6 +1,6 @@
 import { Stock, transformStockData } from "@/types/stock";
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3001";
 
 export async function fetchStockById(tickerId: number): Promise<Stock> {
     const url = `${API_BASE}/stocks/${tickerId}/details`;
