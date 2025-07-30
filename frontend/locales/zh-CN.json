@@ -77,6 +77,12 @@
     "searchPlaceholder": "搜索新闻...",
     "all": "全部",
     "loadMore": "加载更多新闻",
-    "relatedStocks": "相关股票"
+    "relatedStocks": "相关股票",
+    "summary": "摘要",
+    "readFullArticle": "阅读全文",
+    "justNow": "刚刚",
+    "hoursAgo": "{{hours}}小时前",
+    "yesterday": "昨天",
+    "daysAgo": "{{days}}天前"
   }
 }
