@@ -41,15 +41,21 @@ const getUserBalances = async (userId) => {
     return await updateUserBalances(userId);
 };
 
-// ✅ 买入股票
+// 买入股票
 exports.buyStock = async (userId, tickerId, quantity, price) => {
     const balances = await getUserBalances(userId);
     const cost = quantity * price;
 
+    // 余额检查
     if (cost > balances.available_balance) {
-        return { success: false, error: "Insufficient available balance" };
+        return {
+            success: false,
+            error: "Insufficient available balance",
+            user: balances
+        };
     }
 
+    // 查询是否已有持仓
     const { data: existing } = await supabase
         .from("stockholder")
         .select("*")
@@ -72,16 +78,29 @@ exports.buyStock = async (userId, tickerId, quantity, price) => {
     } else {
         await supabase
             .from("stockholder")
-            .insert([
-                { user_id: userId, ticker_id: tickerId, buying_vol: quantity, buying_price: price },
-            ]);
+            .insert([{ user_id: userId, ticker_id: tickerId, buying_vol: quantity, buying_price: price }]);
     }
 
+    // 更新用户资产
     const updatedUser = await updateUserBalances(userId);
-    return { success: true, user: updatedUser };
+
+    // 查询最新持仓数量
+    const { data: updatedHolding } = await supabase
+        .from("stockholder")
+        .select("buying_vol")
+        .eq("user_id", userId)
+        .eq("ticker_id", tickerId)
+        .maybeSingle();
+
+    return {
+        success: true,
+        user: updatedUser,
+        holding: updatedHolding ? updatedHolding.buying_vol : 0
+    };
 };
 
-// ✅ 卖出股票
+
+// 卖出股票
 exports.sellStock = async (userId, tickerId, quantity) => {
     const { data: rows } = await supabase
         .from("stockholder")
@@ -110,11 +129,26 @@ exports.sellStock = async (userId, tickerId, quantity) => {
             .eq("ticker_id", tickerId);
     }
 
+    // 更新用户资产
     const updatedUser = await updateUserBalances(userId);
-    return { success: true, user: updatedUser };
+
+    // 查询最新持仓数量（卖出后可能为 0）
+    const { data: updatedHolding } = await supabase
+        .from("stockholder")
+        .select("buying_vol")
+        .eq("user_id", userId)
+        .eq("ticker_id", tickerId)
+        .maybeSingle();
+
+    return {
+        success: true,
+        user: updatedUser,
+        holding: updatedHolding ? updatedHolding.buying_vol : 0
+    };
 };
 
-// ✅ 获取用户持仓及资产信息
+
+// 获取用户持仓及资产信息
 exports.getHoldingsWithHistory = async (userId) => {
     const { data: holdings } = await supabase
         .from("stockholder")
