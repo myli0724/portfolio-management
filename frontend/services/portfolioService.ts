@@ -1,7 +1,7 @@
 import { CURRENT_USER_ID } from "@/lib/constants"
 import { PortfolioApiResponse } from "@/types/portfolio";
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "http://107.172.83.172:3001";
 
 export async function fetchPortfolio(): Promise<PortfolioApiResponse> {
     const url = `${API_BASE}/user/${CURRENT_USER_ID}/portfolio`;
