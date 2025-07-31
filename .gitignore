@@ -40,3 +40,4 @@ build/
 # 项目特定忽略
 # =========================
 data/
+backend/test.zip
