@@ -268,9 +268,6 @@ export default function Stocks() {
                       <div>
                         <span className="font-semibold">{t("stocks.closingPrice")}:</span> ${selectedStock?.recentClosePrice}
                       </div>
-                      <div>
-                        <span className="font-semibold">{t("stocks.date")}:</span> {selectedStock?.date}
-                      </div>
                     </div>
 
                     <div className="grid grid-cols-3 gap-3">
