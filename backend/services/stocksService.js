@@ -39,6 +39,7 @@ exports.getStockDetails = async (tickerId) => {
     if (historyError) throw historyError;
 
     return {
+        id: tickerData.id,
         ticker_name: tickerData.ticker_name,
         recent_open_price: parseFloat(recent.open.toFixed(2)),
         recent_close_price: parseFloat(recent.close.toFixed(2)),
