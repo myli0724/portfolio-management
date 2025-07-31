@@ -295,7 +295,7 @@ export default function Stocks() {
                   </div>
                 </CardDescription>
                 <CardContent>
-                  <div className="h-64">
+                  <div className="h-72">
                     <StockChart historyData={selectedStock?.history} />
                   </div>
                   {/* <Operation onTrade={handleTrade} direction="row"></Operation> */}

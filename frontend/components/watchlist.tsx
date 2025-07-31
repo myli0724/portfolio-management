@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Search, Star, TrendingUp, TrendingDown, Plus, X } from "lucide-react"
 import Navigation from "@/components/navigation"
-import StockChart from "@/components/stock-chart"
+import StockChart from "@/components/old-stock-chart"
 
-// Mock watchlist data (保持不变)
+// Mock watchlist data
 const mockWatchlist = [
   {
     id: "1",
@@ -19,7 +19,15 @@ const mockWatchlist = [
     change: 2.34,
     changePercent: 1.35,
     volume: "45.2M",
-    data: [170, 172, 168, 175, 173, 176, 175.43],
+    data: [
+      { date: "2024-01-01", close: 170 },
+      { date: "2024-01-02", close: 172 },
+      { date: "2024-01-03", close: 168 },
+      { date: "2024-01-04", close: 175 },
+      { date: "2024-01-05", close: 173 },
+      { date: "2024-01-06", close: 176 },
+      { date: "2024-01-07", close: 175.43 },
+    ],
   },
   {
     id: "3",
@@ -29,7 +37,15 @@ const mockWatchlist = [
     change: 4.12,
     changePercent: 1.1,
     volume: "23.4M",
-    data: [370, 375, 372, 380, 376, 382, 378.85],
+    data: [
+      { date: "2024-01-01", close: 370 },
+      { date: "2024-01-02", close: 375 },
+      { date: "2024-01-03", close: 372 },
+      { date: "2024-01-04", close: 380 },
+      { date: "2024-01-05", close: 376 },
+      { date: "2024-01-06", close: 382 },
+      { date: "2024-01-07", close: 378.85 },
+    ],
   },
   {
     id: "5",
@@ -39,7 +55,15 @@ const mockWatchlist = [
     change: -12.3,
     changePercent: -1.36,
     volume: "67.8M",
-    data: [920, 910, 895, 900, 885, 890, 892.5],
+    data: [
+      { date: "2024-01-01", close: 920 },
+      { date: "2024-01-02", close: 910 },
+      { date: "2024-01-03", close: 895 },
+      { date: "2024-01-04", close: 900 },
+      { date: "2024-01-05", close: 885 },
+      { date: "2024-01-06", close: 890 },
+      { date: "2024-01-07", close: 892.5 },
+    ],
   },
 ]
 
@@ -109,12 +133,8 @@ export default function Watchlist() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredWatchlist.map((stock, index) => (
-              <Card
-                key={stock.id}
-                className="border hover:shadow-lg transition-all duration-300 animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
+            {filteredWatchlist.map((stock) => (
+              <Card key={stock.id} className="border hover:shadow-lg transition-all duration-300">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
