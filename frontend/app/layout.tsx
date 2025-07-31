@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="es">
       <body className={inter.className}>
         <ThemeProvider defaultTheme="light" storageKey="investpro-theme">
           <I18nProvider>
