@@ -1,5 +1,5 @@
-import Market from "@/components/market"
+import Market from "@/components/news"
 
 export default function MarketPage() {
-  return <Market />
+  return <News />
 }
