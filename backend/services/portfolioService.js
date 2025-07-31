@@ -47,8 +47,13 @@ exports.buyStock = async (userId, tickerId, quantity, price) => {
     const cost = quantity * price;
 
     if (cost > balances.available_balance) {
-        return { success: false, error: "Insufficient available balance" };
+        return {
+            success: false,
+            error: "Insufficient available balance",
+            user: balances // ✅ 让前端拿到余额信息
+        };
     }
+
 
     const { data: existing } = await supabase
         .from("stockholder")

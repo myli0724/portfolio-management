@@ -1,7 +1,7 @@
 const supabase = require("../db");
 const portfolioService = require("./portfolioService");
 
-exports.getStockDetails = async (tickerId) => {
+exports.getStockDetails = async (tickerId, userId) => {
     // 获取 ticker 信息
     const { data: tickerData, error: tickerError } = await supabase
         .from("ticker")
@@ -11,32 +11,29 @@ exports.getStockDetails = async (tickerId) => {
 
     if (tickerError || !tickerData) throw new Error("Ticker not found");
 
-    // 获取最近两天的数据（为了计算变化）
+    // 获取最近两天的数据
     const { data: recentData, error: recentError } = await supabase
         .from("price_history")
         .select("date, open, close, high, low, volume")
         .eq("tickerph_id", tickerId)
         .order("date", { ascending: false })
-        .limit(2); // 取最近两天
+        .limit(2);
 
     if (recentError || recentData.length === 0) throw new Error("No price history found");
 
-    const recent = recentData[0]; // 最近一天
-    const prev = recentData.length > 1 ? recentData[1] : recent; // 前一天（如果只有一天，就用同一天）
+    const recent = recentData[0];
+    const prev = recentData.length > 1 ? recentData[1] : recent;
 
-    // 计算变化
     const change = recent.close - prev.close;
     const change_rate = prev.close !== 0 ? (change / prev.close) * 100 : 0;
 
-    // 获取最近 14 天的收盘价走势
-    const { data: history, error: historyError } = await supabase
+    // 获取最近 14 天走势
+    const { data: history } = await supabase
         .from("price_history")
         .select("date, close")
         .eq("tickerph_id", tickerId)
         .order("date", { ascending: true })
         .limit(14);
-
-    if (historyError) throw historyError;
 
     return {
         ticker_name: tickerData.ticker_name,
@@ -52,7 +49,7 @@ exports.getStockDetails = async (tickerId) => {
         history: history.map((h) => ({
             date: h.date,
             close: parseFloat(h.close.toFixed(2)),
-        })),
+        }))
     };
 };
 
