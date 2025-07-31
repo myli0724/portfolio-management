@@ -184,7 +184,7 @@ export default function TradingModal({ isOpen, onClose, stockId, stockName, stoc
             </div>
           )}
 
-          {success && <p className="text-green-600 text-sm">Trade finished!</p>}
+          {success && <p className="text-green-600 text-sm">Trade successful!</p>}
           {error && <p className="text-red-600 text-sm">{error}</p>}
           {insufficientFunds && (
               <p className="text-sm text-red-600 mt-1">Insufficient funds. Your balance is ${userBalance.toFixed(2)}</p>

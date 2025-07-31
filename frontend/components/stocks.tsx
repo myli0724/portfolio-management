@@ -83,7 +83,7 @@ export default function Stocks() {
   useEffect(() => {
     fetchPortfolio()
       .then(data => {
-        // setPortfolioDataList(data.holdings);
+        setPortfolioDataList(data.holdings);
         setBalance(transformBalanceData(data.user))
         console.log(data);
       })
@@ -114,7 +114,17 @@ export default function Stocks() {
   }
 
   const handleTradeComplete = (newUserData: any) => {
-    setBalance(transformBalanceData(newUserData));
+    // 重新从后台拉取数据以获取最新的持股数量
+    fetchPortfolio()
+      .then(data => {
+        setPortfolioDataList(data.holdings);
+        setBalance(transformBalanceData(data.user));
+        console.log("交易完成后重新获取数据:", data);
+      })
+      .catch((err) => {
+        console.log("重新获取数据失败:", err);
+        setError(t("balance.error"));
+      });
   }
 
   const toggleWatchlist = (stockId: number) => {
@@ -379,7 +389,7 @@ export default function Stocks() {
       
       {selectedStock && balance && (
         <TradingModal
-          shares={0}
+          shares={portfolioDataList?.find(holding => holding.tickerId === selectedStock.id)?.shares || 0}
           onTradeComplete={handleTradeComplete}
           isOpen={tradingModalOpen}
           onClose={() => setTradingModalOpen(false)}

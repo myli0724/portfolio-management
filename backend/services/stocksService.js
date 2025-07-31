@@ -36,6 +36,7 @@ exports.getStockDetails = async (tickerId, userId) => {
         .limit(14);
 
     return {
+        id: tickerData.id,
         ticker_name: tickerData.ticker_name,
         recent_open_price: parseFloat(recent.open.toFixed(2)),
         recent_close_price: parseFloat(recent.close.toFixed(2)),
