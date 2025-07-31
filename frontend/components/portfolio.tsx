@@ -109,9 +109,18 @@ export default function Portfolio() {
   }
 
   const handleTradeComplete = (newUserData: any) => {
-    // setPortfolioDataList(newUserData.holdings);
-    // setSummary(newUserData.summary);
-    setBalance(transformBalanceData(newUserData))
+    // 重新从后台拉取数据以刷新股票持股数
+    fetchPortfolio()
+      .then(data => {
+        setPortfolioDataList(data.holdings);
+        setSummary(data.summary);
+        setBalance(transformBalanceData(data.user));
+        console.log("交易完成后重新获取数据:", data);
+      })
+      .catch((err) => {
+        console.log("重新获取数据失败:", err);
+        setError(t("portfolio.error"));
+      });
   }
 
   return (
