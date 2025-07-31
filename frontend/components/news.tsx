@@ -24,11 +24,14 @@ const getCategoriesFromTopics = (news: NewsItem[]): string[] => {
   const allTopics = new Set<string>()
   news.forEach(item => {
     item.topics?.forEach((topic: string) => {
-      allTopics.add(topic)
+      if (topic && typeof topic === 'string') {
+        allTopics.add(topic.trim())
+      }
     })
   })
   
-  const categories = ["全部", ...Array.from(allTopics)]
+  const uniqueTopics = Array.from(allTopics).filter(topic => topic && topic !== "全部")
+  const categories = ["全部", ...uniqueTopics]
   return categories.length > 1 ? categories : ["全部", "财经", "公司", "宏观", "科技", "监管", "产品", "热门"]
 }
 
