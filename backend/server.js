@@ -22,5 +22,11 @@ app.use("/", portfolioRoutes);
 app.use("/stocks", stocksRoutes);
 app.use("/news", newsRoutes);
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+}
+
+// Export for Vercel
+module.exports = app;
