@@ -11,8 +11,9 @@ import StockList from "@/components/stock-list"
 import TradingModal from "@/components/trading-modal"
 import { fetchStockById, fetchStockByKeyWord, tradeStock } from "@/services/stocksService"
 import { Stock } from "@/types/stock"
-import Operation from "./operation"
 import { useI18n } from "./i18n-provider"
+import { fetchPortfolio } from "@/services/portfolioService"
+import { Balance, PortfolioData, transformBalanceData } from "@/types/portfolio"
 
 // Mock data
 const mockStocks = [
@@ -76,6 +77,21 @@ export default function Stocks() {
   const [watchlist, setWatchlist] = useState<number[]>([1, 3])
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<String>("");
+  const [portfolioDataList, setPortfolioDataList] = useState<PortfolioData[]>();
+  const [balance, setBalance] = useState<Balance>();
+
+  useEffect(() => {
+    fetchPortfolio()
+      .then(data => {
+        // setPortfolioDataList(data.holdings);
+        setBalance(transformBalanceData(data.user))
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(t("balance.error"))
+      })
+  }, [])
 
   useEffect(() => {
     setLoading(true);
@@ -95,6 +111,10 @@ export default function Stocks() {
     setSelectedStock(stock);
     setTradingType(type);
     setTradingModalOpen(true);
+  }
+
+  const handleTradeComplete = (newUserData: any) => {
+    setBalance(transformBalanceData(newUserData));
   }
 
   const toggleWatchlist = (stockId: number) => {
@@ -357,10 +377,10 @@ export default function Stocks() {
         </div>
       </div>
       
-      {selectedStock && (
+      {selectedStock && balance && (
         <TradingModal
           shares={0}
-          onTradeComplete={() => {}}
+          onTradeComplete={handleTradeComplete}
           isOpen={tradingModalOpen}
           onClose={() => setTradingModalOpen(false)}
           stockId={selectedStock.id}
@@ -368,7 +388,7 @@ export default function Stocks() {
           stockPrice={selectedStock.recentClosePrice}
           stockChange={selectedStock.change}
           stockChangeRate={selectedStock.changeRate}
-          type={tradingType} userBalance={0} />
+          type={tradingType} userBalance={balance?.availableBalance} />
       )}
     </div>
   )
