@@ -16,7 +16,7 @@ const getNavItems = (t: (key: string) => string) => [
   { href: "/watchlist", icon: Star, label: t("navigation.watchlist"), badge: "12" },
   { href: "/market", icon: TrendingUp, label: t("navigation.market"), badge: null },
   { href: "/profile", icon: User, label: t("navigation.profile"), badge: null },
-  { href: "/settings", icon: Settings, label: t("navigation.settings"), badge: null },
+  // { href: "/settings", icon: Settings, label: t("navigation.settings"), badge: null },
 ]
 
 export default function Navigation() {
