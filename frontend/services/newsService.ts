@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://107.172.83.172:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "https://pmapi.aixcat.top/api";
 
 export interface NewsItem {
   id: string;
