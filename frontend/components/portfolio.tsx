@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart, LineChart, Banknote } from "lucide-react"
+import { TrendingUp, TrendingDown, DollarSign, Percent, PieChart, LineChart, Banknote, AreaChart, PiggyBank } from "lucide-react"
 import Navigation from "@/components/navigation"
 import StockChart from "@/components/old-stock-chart"
 import { fetchPortfolio } from "@/services/portfolioService";
@@ -150,7 +150,7 @@ export default function Portfolio() {
             <Card className="border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-2">
-                  <LineChart className="h-5 w-5 text-green-700" />
+                  <PiggyBank className="h-5 w-5 text-green-700" />
                   <span className="text-muted-foreground text-sm">{t("portfolio.assets")}</span>
                 </div>
                 <p className="text-2xl font-bold text-foreground">${animatedAssets.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
@@ -168,8 +168,7 @@ export default function Portfolio() {
             <Card className="border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-2">
-
-                  <TrendingUp className={` h-5 w-5 ${ summary?.totalProfit && summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}/>
+                  <LineChart className={` h-5 w-5 ${ summary?.totalProfit && summary?.totalProfit >= 0 ? "text-green-600" : "text-red-600" }`}/>
                   <span className="text-muted-foreground text-sm">{t("portfolio.totalGainLoss")}</span>
                 </div>
                 {summary?.totalProfit !== undefined && (

@@ -112,7 +112,7 @@ export default function Watchlist() {
 
         {/* Add Stock Button */}
         <div className="mb-6">
-          <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
+          <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white">
             <Plus className="h-4 w-4 mr-2" />
             Add Stocks
           </Button>
@@ -179,7 +179,7 @@ export default function Watchlist() {
                     <span>Volume: {stock.volume}</span>
                   </div>
                   <div className="flex gap-2">
-                    <Button className="bg-green-600 hover:bg-green-700 flex-1">Buy</Button>
+                    <Button className="bg-green-600 hover:bg-green-700 flex-1 text-white">Buy</Button>
                     <Button
                       variant="outline"
                       className="border-red-600 text-red-600 hover:bg-red-600/10 flex-1 bg-transparent"
